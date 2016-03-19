@@ -164,7 +164,7 @@ instance Storable Paint where
 
 data GlyphPosition =
      GlyphPosition { str :: !(Ptr CChar)
-                   , x :: !CFloat
+                   , glyphX :: !CFloat
                    -- Remove prefix once GHC 8 is released
                    , glyphPosMinX :: !CFloat
                    , glyphPosMaxX :: !CFloat}
@@ -330,13 +330,13 @@ withTransformation t f = with t (\p -> f (castPtr p))
 {#fun unsafe nvgTransformInverse as transformInverse
         {allocaTransformation-`Transformation'peekTransformation*,withTransformation*`Transformation'} -> `()'#}
 
-{#fun unsafe nvgTransformPoint as transformPoint
+{#fun pure unsafe nvgTransformPoint as transformPoint
         {alloca-`CFloat'peek*,alloca-`CFloat'peek*,withTransformation*`Transformation',`CFloat',`CFloat'} -> `()'#}
 
-{#fun unsafe nvgDegToRad as degtoRad
+{#fun pure unsafe nvgDegToRad as degtoRad
         {`CFloat'} -> `CFloat'#}
 
-{#fun unsafe nvgRadToDeg as radToDeg
+{#fun pure unsafe nvgRadToDeg as radToDeg
         {`CFloat'} -> `CFloat'#}
 
 {#fun unsafe nvgCreateImage as createImage
