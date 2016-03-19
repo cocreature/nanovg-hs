@@ -2,14 +2,17 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Main where
 
+import qualified Data.Text as T
 import           Control.Monad
 import           Control.Monad.Loops
 import           Data.Bits hiding (rotate)
+import           Data.Monoid
 import qualified Data.Set as S
 import qualified Data.Vector as V
 import           Graphics.GL.Core32
 import           Graphics.UI.GLFW
-import           NanoVG
+import           NanoVG as NVG
+import           NanoVG.Internal as Internal
 import           Prelude hiding (init)
 
 import           Foreign.C.Types
@@ -35,6 +38,7 @@ main =
             glewInit
             glGetError
             c@(Context c') <- createGL3 (S.fromList [Antialias,StencilStrokes,Debug]) 
+            demoData <- loadDemoData c
             swapInterval 0
             setTime 0
             whileM_ (not <$> windowShouldClose w) $
@@ -124,13 +128,27 @@ drawEyes c@(Context c') x y w h mx my t = do
         blink = 1 - ((sin (t*0.5))**200)*0.8
 
 drawParagraph :: Context -> CFloat -> CFloat -> CFloat -> CFloat -> CFloat -> CFloat -> IO ()
-drawParagraph c x y width height mx my =
+drawParagraph c x y w h mx my =
   do save c
      fontSize c 18
      fontFace c "sans"
      textAlign c (S.fromList [AlignLeft,AlignTop])
      (_,_,lineh) <- textMetrics c
-     pure ()
+     NVG.textBreakLines c text w 3 $ \row i -> do
+       let y' = y + fromIntegral i * lineh
+           hit = mx > x && mx < (x+w) && my >= y' && my < (y' + lineh)
+       beginPath c
+       fillColor c (rgba 255 255 255 (if hit then 64 else 16))
+       rect c x y' (width row) lineh
+       fill c
+
+       fillColor c (rgba 255 255 255 255)
+       NVG.text c x y' (start row) (end row)
+       when hit $ do
+         let caretx = if mx < x+ (width row) / 2 then x else x + width row
+             ps = x
+         pure ()
+     restore c
   where text = "This is longer chunk of text.\n \n Would have used lorem ipsum but she    was busy jumping over the lazy dog with the fox and all the men who came to the aid of the party."
 
 drawGraph :: Context -> CFloat -> CFloat -> CFloat -> CFloat -> CFloat -> IO ()
@@ -333,3 +351,23 @@ drawWidths c x y width =
           lineTo c (x+width) (y'+width*0.3)
           stroke c
      restore c
+
+data DemoData =
+  DemoData {fontNormal :: Font
+           ,fontBold :: Font
+           ,fontIcons :: Font
+           ,images :: V.Vector Image}
+
+loadDemoData :: Context -> IO (Maybe DemoData)
+loadDemoData c = do icons <- createFont c "icons" (FileName "nanovg/example/entypo.ttf")
+                    normal <- createFont c "sans" (FileName "nanovg/example/Roboto-Regular.ttf")
+                    bold <- createFont c "sans-bold" (FileName "nanovg/example/Roboto-Bold.ttf")
+                    images <- loadImages
+                    pure (Just (DemoData icons normal bold images))
+  where loadImages :: IO (V.Vector Image)
+        loadImages =
+          V.generateM 12 $
+          \i ->
+            do let file = FileName $
+                     "nanovg/example/images/image" <> T.pack (show (i + 1)) <> ".jpg"
+               createImage c file 0

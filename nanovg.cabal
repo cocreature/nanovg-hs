@@ -53,6 +53,7 @@ executable example00
                     , GLFW-b
                     , monad-loops
                     , nanovg
+                    , text
                     , vector
   default-language:   Haskell2010
   c-sources:          cbits/glew.c

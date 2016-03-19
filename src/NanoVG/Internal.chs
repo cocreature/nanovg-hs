@@ -193,7 +193,26 @@ data TextRow =
           ,width :: !CFloat
           -- Remove prefix once GHC 8 is released
           ,textRowMinX :: !CFloat
-          ,textRowMaxX :: !CFloat}
+          ,textRowMaxX :: !CFloat} deriving (Show,Eq,Ord)
+
+instance Storable TextRow where
+  sizeOf _ = 40
+  alignment _ = {#alignof NVGtextRow#}
+  peek p =
+    do start <- {#get NVGtextRow->start#} p
+       end <- {#get NVGtextRow->end#} p
+       next <- {#get NVGtextRow->next#} p
+       width <- {#get NVGtextRow->width#} p
+       minX <- {#get NVGtextRow->minx#} p
+       maxX <- {#get NVGtextRow->maxx#} p
+       pure (TextRow start end next width minX maxX)
+  poke p (TextRow {..}) =
+    do {#set NVGtextRow->start#} p start
+       {#set NVGtextRow->end#} p end
+       {#set NVGtextRow->next#} p next
+       {#set NVGtextRow->width#} p width
+       {#set NVGtextRow->minx#} p textRowMinX
+       {#set NVGtextRow->maxx#} p textRowMaxX
 
 {#pointer *NVGtextRow as TextRowPtr -> TextRow#}
 
@@ -454,7 +473,7 @@ withTransformation t f = with t (\p -> f (castPtr p))
         {`Context',withCString*`T.Text'} -> `()'#}
 
 {#fun unsafe nvgText as text
-         {`Context',`CFloat',`CFloat',withCString*`T.Text',null-`Ptr CUChar'} -> `()'#}
+         {`Context',`CFloat',`CFloat',id`Ptr CChar',id`Ptr CChar'} -> `()'#}
 
 {#fun unsafe nvgTextBox as textBox
         {`Context',`CFloat',`CFloat',`CFloat',withCString*`T.Text',null-`Ptr CUChar'} -> `()'#}
@@ -502,7 +521,7 @@ withBounds t f = with t (\p -> f (castPtr p))
 
 -- TODO: This should probably take a vector
 {#fun unsafe nvgTextBreakLines as textBreakLines
-        {`Context',withCString*`T.Text',null-`Ptr CUChar',`CFloat',`TextRowPtr',`CInt'} -> `CInt'#}
+        {`Context',id`Ptr CChar',id`Ptr CChar',`CFloat',`TextRowPtr',`CInt'} -> `CInt'#}
 
 {#enum NVGcreateFlags as CreateFlags
          {underscoreToCase} with prefix = "NVG_"
