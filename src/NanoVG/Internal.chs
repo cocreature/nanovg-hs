@@ -172,7 +172,7 @@ data GlyphPosition =
 {#pointer *NVGglyphPosition as GlyphPositionPtr -> GlyphPosition#}
 
 instance Storable GlyphPosition where
-  sizeOf _ = {#sizeof NVGglyphPosition#}
+  sizeOf _ = 24
   alignment _ = {#alignof NVGglyphPosition#}
   peek p =
     do str <- {#get NVGglyphPosition->str#} p
@@ -352,7 +352,7 @@ withTransformation t f = with t (\p -> f (castPtr p))
 {#fun pure unsafe nvgTransformPoint as transformPoint
         {alloca-`CFloat'peek*,alloca-`CFloat'peek*,withTransformation*`Transformation',`CFloat',`CFloat'} -> `()'#}
 
-{#fun pure unsafe nvgDegToRad as degtoRad
+{#fun pure unsafe nvgDegToRad as degToRad
         {`CFloat'} -> `CFloat'#}
 
 {#fun pure unsafe nvgRadToDeg as radToDeg
@@ -514,7 +514,7 @@ withBounds t f = with t (\p -> f (castPtr p))
 
 -- TODO: This should probably take a vector
 {#fun unsafe nvgTextGlyphPositions as textGlyphPositions
-        {`Context',`CFloat',`CFloat',withCString*`T.Text',null-`Ptr CUChar',`GlyphPositionPtr', `CInt'} -> `CInt'#}
+        {`Context',`CFloat',`CFloat',id`Ptr CChar',id`Ptr CChar',`GlyphPositionPtr', `CInt'} -> `CInt'#}
 
 {#fun unsafe nvgTextMetrics as textMetrics
         {`Context',alloca-`CFloat'peek*,alloca-`CFloat'peek*,alloca-`CFloat'peek*} -> `()'#}

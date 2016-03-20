@@ -2,15 +2,18 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Main where
 
-import qualified Data.Text as T
 import           Control.Monad
 import           Control.Monad.Loops
 import           Data.Bits hiding (rotate)
+import           Data.IORef
+import           Data.Maybe
 import           Data.Monoid
 import qualified Data.Set as S
+import qualified Data.Text as T
 import qualified Data.Vector as V
 import           Graphics.GL.Core32
 import           Graphics.UI.GLFW
+import           Linear.V4
 import           NanoVG as NVG
 import           NanoVG.Internal as Internal
 import           Prelude hiding (init)
@@ -66,6 +69,10 @@ renderDemo c mx my w h t =
      drawLines c 120 (fromIntegral h - 50) 600 50 (realToFrac t)
 
      drawWidths c 10 50 30
+
+     drawCaps c 10 300 30
+
+     drawScissor c 50 (fromIntegral h-80) (realToFrac t)
 
 drawEyes :: Context -> CFloat -> CFloat -> CFloat -> CFloat -> CFloat -> CFloat -> CFloat -> IO ()
 drawEyes c@(Context c') x y w h mx my t = do
@@ -134,29 +141,87 @@ drawParagraph c x y w h mx my =
      fontFace c "sans"
      textAlign c (S.fromList [AlignLeft,AlignTop])
      (_,_,lineh) <- textMetrics c
+     gutter <- newIORef Nothing
+     yEnd <- newIORef y
      NVG.textBreakLines c text w 3 $ \row i -> do
        let y' = y + fromIntegral i * lineh
            hit = mx > x && mx < (x+w) && my >= y' && my < (y' + lineh)
+       writeIORef yEnd y'
        beginPath c
        fillColor c (rgba 255 255 255 (if hit then 64 else 16))
        rect c x y' (width row) lineh
        fill c
 
        fillColor c (rgba 255 255 255 255)
-       NVG.text c x y' (start row) (end row)
+       Internal.text c x y' (start row) (end row)
        when hit $ do
-         let caretx = if mx < x+ (width row) / 2 then x else x + width row
+         let caretxInit = if mx < x+ (width row) / 2 then x else x + width row
              ps = x
-         pure ()
+         glyphs <- NVG.textGlyphPositions c x y (start row) (end row) 100
+         let leftBorders = V.map glyphX glyphs
+             rightBorders = V.snoc (V.drop 1 leftBorders) (x + width row)
+             rightPoints = V.zipWith (\x y -> 0.3*x+0.7*y) leftBorders rightBorders
+             leftPoints = V.cons x (V.take (V.length glyphs - 1) rightPoints)
+             caretx = maybe caretxInit (glyphX . (glyphs V.!)) $ V.findIndex (\(px,gx) -> mx >= px && mx < gx) $ V.zip leftPoints rightPoints
+         beginPath c
+         fillColor c (rgba 255 192 0 255)
+         rect c caretx y' 1 lineh
+         fill c
+         -- realized too late that I probably should have used a fold
+         writeIORef gutter (Just (i+1,x-10,y'+lineh/2))
+     gutter' <- readIORef gutter
+     forM_ gutter' $ \(gutter,gx,gy) -> do
+       let txt = T.pack $ show gutter
+       fontSize c 13
+       textAlign c (S.fromList [AlignRight,AlignMiddle])
+       (Bounds (V4 b0 b1 b2 b3)) <- textBounds c gx gy txt
+       beginPath c
+       fillColor c (rgba 255 192 0 255)
+       roundedRect c (b0-4) (b1-2) ((b2-b0)+8) ((b3-b1)+4) (((b3-b1)+4)/2-1)
+       fill c
+       fillColor c (rgba 32 32 32 255)
+       NVG.text c gx gy txt
+
+     y' <- (\x -> x+20+lineh) <$> readIORef yEnd
+
+     fontSize c 13
+     textAlign c (S.fromList [AlignLeft, AlignTop])
+     textLineHeight c 1.2
+
+     (Bounds (V4 b0 b1 b2 b3)) <- textBoxBounds c x y' 150 helpText
+
+     let gx = abs $ (mx - (b0+b2)*0.5) / (b0 - b2)
+         gy = abs $ (my - (b1+b3)*0.5) / (b1 - b3)
+         clamp a' low up
+           | a' < low = low
+           | a' > up = up
+           | otherwise = a'
+         a = (\x -> clamp x 0 1) $ max gx gy - 0.5
+     globalAlpha c a
+
+     beginPath c
+     fillColor c (rgba 220 220 220 255)
+     roundedRect c (b0-2) (b1-2) ((b2-b0)+4) ((b3-b1)+4) 3
+     let px = (b2+b0)/2
+     moveTo c px (b1-10)
+     lineTo c (px+7) (b1+1)
+     lineTo c (px-7) (b1+1)
+     fill c
+
+     fillColor c (rgba 0 0 0 220)
+     textBox c x y' 150 helpText
+         
      restore c
   where text = "This is longer chunk of text.\n \n Would have used lorem ipsum but she    was busy jumping over the lazy dog with the fox and all the men who came to the aid of the party."
+        helpText = "Hover your mouse over the text to see calculated caret position."
 
 drawGraph :: Context -> CFloat -> CFloat -> CFloat -> CFloat -> CFloat -> IO ()
 drawGraph c x y w h t =
   do bg <- linearGradient c x y x (y+h) (rgba 0 16 192 0) (rgba 0 160 192 64)
      beginPath c
      moveTo c (sx V.! 0) (sy V.! 0)
-     forM_ [1..5] $ \i -> bezierTo c (sx V.! (i-1) + dx*0.5) (sy V.! (i-1)) (sx V.! i - dx*0.5) (sy V.! i) (sx V.! i) (sy V.! i)
+     forM_ [1..5] $ \i ->
+       bezierTo c (sx V.! (i-1) + dx*0.5) (sy V.! (i-1)) (sx V.! i - dx*0.5) (sy V.! i) (sx V.! i) (sy V.! i)
      lineTo c (x+w) (y+h)
      lineTo c x (y+h)
      fillPaint c bg
@@ -164,14 +229,16 @@ drawGraph c x y w h t =
 
      beginPath c
      moveTo c (sx V.! 0) (sy V.! 0 + 2)
-     forM_ [1..5] $ \i -> bezierTo c (sx V.! (i-1)+dx*0.5) (sy V.! (i-1)+2) (sx V.! i - dx*0.5) (sy V.! i + 2) (sx V.! i) (sy V.! i + 2)
+     forM_ [1..5] $ \i ->
+       bezierTo c (sx V.! (i-1)+dx*0.5) (sy V.! (i-1)+2) (sx V.! i - dx*0.5) (sy V.! i + 2) (sx V.! i) (sy V.! i + 2)
      strokeColor c (rgba 0 0 0 32)
      strokeWidth c 3
      stroke c
 
      beginPath c
      moveTo c (sx V.! 0) (sy V.! 0)
-     forM_ [1..5] $ \i -> bezierTo c (sx V.! (i-1)+dx*0.5) (sy V.! (i-1)) (sx V.! i - dx*0.5) (sy V.! i) (sx V.! i) (sy V.! i)
+     forM_ [1..5] $ \i ->
+       bezierTo c (sx V.! (i-1)+dx*0.5) (sy V.! (i-1)) (sx V.! i - dx*0.5) (sy V.! i) (sx V.! i) (sy V.! i)
      strokeColor c (rgba 0 160 192 255)
      strokeWidth c 3
      stroke c
@@ -341,7 +408,7 @@ drawLines c x y w h t =
 drawWidths :: Context -> CFloat -> CFloat -> CFloat -> IO ()
 drawWidths c x y width =
   do save c
-     let c0 = rgba 0 0 0 255
+     strokeColor c (rgba 0 0 0 255)
      forM_ [0..19] $ \i ->
        do let w = (i+0.5)*0.1
               y' = y + (10*i)
@@ -371,3 +438,59 @@ loadDemoData c = do icons <- createFont c "icons" (FileName "nanovg/example/enty
             do let file = FileName $
                      "nanovg/example/images/image" <> T.pack (show (i + 1)) <> ".jpg"
                createImage c file 0
+
+drawCaps :: Context -> CFloat -> CFloat -> CFloat -> IO ()
+drawCaps c x y width =
+  do save c
+
+     beginPath c
+     rect c (x-lineWidth/2) y (width+lineWidth) 40
+     fillColor c (rgba 255 255 255 32)
+     fill c
+
+     beginPath c
+     rect c x y width 40
+     fillColor c (rgba 255 255 255 32)
+     fill c
+
+     strokeWidth c lineWidth
+     forM_ (zip [0..] [Butt,Round,Square]) $ \(i,cap) ->
+       do lineCap c cap
+          strokeColor c (rgba 0 0 0 255)
+          beginPath c
+          moveTo c x (y+i*10+5)
+          lineTo c (x+width) (y+i*10+5)
+          stroke c
+     restore c
+  where lineWidth = 8
+
+drawScissor :: Context -> CFloat -> CFloat -> CFloat -> IO ()
+drawScissor c x y t =
+  do save c
+
+     translate c x y
+     rotate c (degToRad 5)
+     beginPath c
+     rect c (-20) (-20) 60 40
+     fillColor c (rgba 255 0 0 255)
+     fill c
+     scissor c (-20) (-20) 60 40
+
+     translate c 40 0
+     rotate c t
+
+     save c
+     resetScissor c
+     beginPath c
+     rect c (-20) (-10) 60 30
+     fillColor c (rgba 255 128 0 64)
+     fill c
+     restore c
+
+     intersectScissor c (-20) (-10) 60 30
+     beginPath c
+     rect c (-20) (-10) 60 30
+     fillColor c (rgba 255 128 0 255)
+     fill c
+
+     restore c
