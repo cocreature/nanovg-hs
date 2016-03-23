@@ -4,6 +4,7 @@ module Main where
 
 import           Control.Monad
 import           Control.Monad.Loops
+import           Control.Monad.Trans.Maybe
 import           Data.Bits hiding (rotate)
 import           Data.IORef
 import           Data.Maybe
@@ -40,8 +41,9 @@ main =
          do makeContextCurrent win
             glewInit
             glGetError
-            c@(Context c') <- createGL3 (S.fromList [Antialias,StencilStrokes,Debug]) 
-            demoData <- loadDemoData c
+            c@(Context c') <- createGL3 (S.fromList [Antialias,StencilStrokes,Debug])
+            -- error handling? who needs that anyway
+            Just demoData <- runMaybeT $ loadDemoData c
             swapInterval 0
             setTime 0
             whileM_ (not <$> windowShouldClose w) $
@@ -54,13 +56,13 @@ main =
                  glClearColor 0.3 0.3 0.32 1.0
                  glClear (GL_COLOR_BUFFER_BIT .|. GL_DEPTH_BUFFER_BIT .|. GL_STENCIL_BUFFER_BIT)
                  beginFrame c (fromIntegral width) (fromIntegral height) pxRatio
-                 renderDemo c mx my width height t
+                 renderDemo c demoData mx my width height t
                  endFrame c
                  swapBuffers w
                  pollEvents
 
-renderDemo :: Context -> Double -> Double -> Int -> Int -> Double -> IO ()
-renderDemo c mx my w h t =
+renderDemo :: Context -> DemoData -> Double -> Double -> Int -> Int -> Double -> IO ()
+renderDemo c demoData mx my w h t =
   do drawEyes c (fromIntegral w - 250) 50 150 100 (realToFrac mx) (realToFrac my) (realToFrac t)
      drawParagraph c (fromIntegral w - 450) 50 150 100 (realToFrac mx) (realToFrac my)
      drawGraph c 0 (fromIntegral h/2) (fromIntegral w) (fromIntegral h/2) (realToFrac t)
@@ -73,6 +75,114 @@ renderDemo c mx my w h t =
      drawCaps c 10 300 30
 
      drawScissor c 50 (fromIntegral h-80) (realToFrac t)
+
+     save c
+     let popy = 95 + 24
+     drawThumbnails c 365 popy 160 300 (images demoData) (realToFrac t)
+
+     restore c
+
+drawThumbnails :: Context -> CFloat -> CFloat -> CFloat -> CFloat -> V.Vector Image -> CFloat -> IO ()
+drawThumbnails vg x y w h images t =
+  do let cornerRadius = 3
+         thumb = 60
+         arry = 30.5
+         nimages = V.length images
+         stackh = (fromIntegral nimages/2)*(thumb+10)+10
+         u = (1+cos (t*0.5))*0.5
+         u2 = (1-cos (t*0.2))*0.5
+         dv = 1/(fromIntegral nimages - 1)
+     save vg
+
+     shadowPaint <- boxGradient vg x (y+4) w h (cornerRadius*2) 20 (rgba 0 0 0 128) (rgba 0 0 0 0)
+     beginPath vg
+     rect vg (x-10) (y-10) (w+20) (h+30)
+     roundedRect vg x y w h cornerRadius
+     pathWinding vg (fromIntegral $ fromEnum Hole)
+     fillPaint vg shadowPaint
+     fill vg
+
+     beginPath vg
+     roundedRect vg x y w h cornerRadius
+     moveTo vg (x-10) (y+arry)
+     lineTo vg (x+1) (y+arry-11)
+     lineTo vg (x+1) (y+arry+11)
+     fillColor vg (rgba 200 200 200 255)
+     fill vg
+
+     save vg
+     scissor vg x y w h
+     translate vg 0 (-(stackh-h)*u)
+
+     flip V.imapM_ images $ \i image -> do
+       let tx = x + 10 + fromIntegral (i `mod` 2) * (thumb + 10)
+           ty = y + 10 + fromIntegral (i `div` 2) * (thumb + 10)
+           v = fromIntegral i * dv
+           a = clamp ((u2-v)/dv) 0 1
+           drawImage iw ih ix iy = do
+             imgPaint <- imagePattern vg (tx+ix) (ty+iy) iw ih (0/180*pi) image a
+             beginPath vg
+             roundedRect vg tx ty thumb thumb 5
+             fillPaint vg imgPaint
+             fill vg
+       (imgw,imgh) <- imageSize vg image
+
+       when (a < 1) $ drawSpinner vg (tx + thumb/2) (ty+thumb/2) (thumb*0.25) t
+
+       if imgw < imgh
+       then
+         let iw = thumb
+             ih = iw*fromIntegral imgh/fromIntegral imgw
+             ix = 0
+             iy = -(ih-thumb)*0.5
+         in drawImage iw ih ix iy
+       else
+         let ih = thumb
+             iw = ih * fromIntegral imgw/ fromIntegral imgh
+             ix = -(iw-thumb)*0.5
+             iy = 0
+         in drawImage iw ih ix iy
+
+       shadowPaint <- boxGradient vg (tx-1) ty (thumb+2) (thumb+2) 5 3 (rgba 0 0 0 128) (rgba 0 0 0 0)
+       beginPath vg
+       rect vg (tx-5) (ty-5) (thumb+10) (thumb+10)
+       roundedRect vg tx ty thumb thumb 6
+       pathWinding vg (fromIntegral $ fromEnum Hole)
+       fillPaint vg shadowPaint
+       fill vg
+
+       beginPath vg
+       roundedRect vg (tx+0.5) (ty+0.5) (thumb-1) (thumb-1) (4-0.5)
+       strokeWidth vg 1
+       strokeColor vg (rgba 255 255 255 192)
+       stroke vg
+
+
+     restore vg
+
+     restore vg
+
+drawSpinner :: Context -> CFloat -> CFloat -> CFloat -> CFloat -> IO ()
+drawSpinner vg cx cy r t =
+  do let a0 = 0+t*6
+         a1 = pi + t*6
+         r0 = r
+         r1 = r*0.75
+     save vg
+
+     beginPath vg
+     arc vg cx cy r0 a0 a1 CW
+     arc vg cx cy r1 a1 a0 CCW
+     closePath vg
+     let ax = cx+cos a0 * (r0+r1)*0.5
+         ay = cy+sin a0 * (r0+r1)*0.5
+         bx = cx+cos a1 * (r0+r1)*0.5
+         by = cy+sin a1 * (r0+r1)*0.5
+     paint <- linearGradient vg ax ay bx by (rgba 0 0 0 0) (rgba 0 0 0 128)
+     fillPaint vg paint
+     fill vg
+
+     restore vg
 
 drawEyes :: Context -> CFloat -> CFloat -> CFloat -> CFloat -> CFloat -> CFloat -> CFloat -> IO ()
 drawEyes c@(Context c') x y w h mx my t = do
@@ -192,10 +302,6 @@ drawParagraph c x y w h mx my =
 
      let gx = abs $ (mx - (b0+b2)*0.5) / (b0 - b2)
          gy = abs $ (my - (b1+b3)*0.5) / (b1 - b3)
-         clamp a' low up
-           | a' < low = low
-           | a' > up = up
-           | otherwise = a'
          a = (\x -> clamp x 0 1) $ max gx gy - 0.5
      globalAlpha c a
 
@@ -425,19 +531,19 @@ data DemoData =
            ,fontIcons :: Font
            ,images :: V.Vector Image}
 
-loadDemoData :: Context -> IO (Maybe DemoData)
-loadDemoData c = do icons <- createFont c "icons" (FileName "nanovg/example/entypo.ttf")
-                    normal <- createFont c "sans" (FileName "nanovg/example/Roboto-Regular.ttf")
-                    bold <- createFont c "sans-bold" (FileName "nanovg/example/Roboto-Bold.ttf")
+loadDemoData :: Context -> MaybeT IO DemoData
+loadDemoData c = do icons <- MaybeT $ createFont c "icons" (FileName "nanovg/example/entypo.ttf")
+                    normal <- MaybeT $ createFont c "sans" (FileName "nanovg/example/Roboto-Regular.ttf")
+                    bold <- MaybeT $ createFont c "sans-bold" (FileName "nanovg/example/Roboto-Bold.ttf")
                     images <- loadImages
-                    pure (Just (DemoData icons normal bold images))
-  where loadImages :: IO (V.Vector Image)
+                    pure (DemoData icons normal bold images)
+  where loadImages :: MaybeT IO (V.Vector Image)
         loadImages =
           V.generateM 12 $
           \i ->
             do let file = FileName $
                      "nanovg/example/images/image" <> T.pack (show (i + 1)) <> ".jpg"
-               createImage c file 0
+               MaybeT $ createImage c file 0
 
 drawCaps :: Context -> CFloat -> CFloat -> CFloat -> IO ()
 drawCaps c x y width =
@@ -494,3 +600,9 @@ drawScissor c x y t =
      fill c
 
      restore c
+
+clamp :: Ord a => a -> a -> a -> a
+clamp a' low up
+  | a' < low = low
+  | a' > up = up
+  | otherwise = a'
