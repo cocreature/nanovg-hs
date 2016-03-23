@@ -358,14 +358,19 @@ withTransformation t f = with t (\p -> f (castPtr p))
 {#fun pure unsafe nvgRadToDeg as radToDeg
         {`CFloat'} -> `CFloat'#}
 
+safeImage :: CInt -> Maybe Image
+safeImage i
+  | i < 0 = Nothing
+  | otherwise = Just (Image i)
+
 {#fun unsafe nvgCreateImage as createImage
-        {`Context','withCString.unwrapFileName'*`FileName',`CInt'} -> `Image'Image#}
+        {`Context','withCString.unwrapFileName'*`FileName',`CInt'} -> `Maybe Image'safeImage#}
 
 {#fun unsafe nvgCreateImageMem as createImageMem
-        {`Context',`ImageFlags',useAsCStringLen'*`ByteString'&} -> `Image'Image#}
+        {`Context',`ImageFlags',useAsCStringLen'*`ByteString'&} -> `Maybe cImage'safeImage#}
 
 {#fun unsafe nvgCreateImageRGBA as createImageRGBA
-        {`Context',`CInt',`CInt',`ImageFlags',useAsPtr*`ByteString'} -> `Image'Image#}
+        {`Context',`CInt',`CInt',`ImageFlags',useAsPtr*`ByteString'} -> `Maybe Image'safeImage#}
 
 {#fun unsafe nvgUpdateImage as updateImage
         {`Context',imageHandle`Image',useAsPtr*`ByteString'} -> `()'#}
@@ -442,14 +447,19 @@ withTransformation t f = with t (\p -> f (castPtr p))
 {#fun unsafe nvgStroke as stroke
         {`Context'} -> `()'#}
 
+safeFont :: CInt -> Maybe Font
+safeFont i
+  | i < 0 = Nothing
+  | otherwise = Just (Font i)
+
 {#fun unsafe nvgCreateFont as createFont
-        {`Context',withCString*`T.Text','withCString.unwrapFileName'*`FileName'} -> `Font'Font#}
+        {`Context',withCString*`T.Text','withCString.unwrapFileName'*`FileName'} -> `Maybe Font'safeFont#}
 
 {#fun unsafe nvgCreateFontMem as createFontMem
-        {`Context',withCString*`T.Text',useAsCStringLen'*`ByteString'&,zero-`CInt'} -> `Font'Font#}
+        {`Context',withCString*`T.Text',useAsCStringLen'*`ByteString'&,zero-`CInt'} -> `Maybe Font'safeFont#}
 
 {#fun unsafe nvgFindFont as findFont
-        {`Context', withCString*`T.Text'} -> `Font'Font#}
+        {`Context', withCString*`T.Text'} -> `Maybe Font'safeFont#}
 
 {#fun unsafe nvgFontSize as fontSize
         {`Context',`CFloat'} -> `()'#}
