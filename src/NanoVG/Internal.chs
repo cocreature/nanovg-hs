@@ -367,7 +367,7 @@ safeImage i
         {`Context','withCString.unwrapFileName'*`FileName',`CInt'} -> `Maybe Image'safeImage#}
 
 {#fun unsafe nvgCreateImageMem as createImageMem
-        {`Context',`ImageFlags',useAsCStringLen'*`ByteString'&} -> `Maybe cImage'safeImage#}
+        {`Context',`ImageFlags',useAsCStringLen'*`ByteString'&} -> `Maybe Image'safeImage#}
 
 {#fun unsafe nvgCreateImageRGBA as createImageRGBA
         {`Context',`CInt',`CInt',`ImageFlags',useAsPtr*`ByteString'} -> `Maybe Image'safeImage#}
