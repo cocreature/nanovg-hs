@@ -80,7 +80,7 @@ instance Storable Transformation where
 newtype Extent = Extent (V2 CFloat) deriving (Show,Read,Eq,Ord)
 
 instance Storable Extent where
-  sizeOf _ = sizeOf (0 :: CFloat) * 4
+  sizeOf _ = sizeOf (0 :: CFloat) * 2
   alignment _ = alignment (0 :: CFloat)
   peek p =
     do let p' = castPtr p :: Ptr CFloat
@@ -167,7 +167,7 @@ data GlyphPosition =
                    , glyphX :: !CFloat
                    -- Remove prefix once GHC 8 is released
                    , glyphPosMinX :: !CFloat
-                   , glyphPosMaxX :: !CFloat}
+                   , glyphPosMaxX :: !CFloat} deriving (Show,Eq,Ord)
 
 {#pointer *NVGglyphPosition as GlyphPositionPtr -> GlyphPosition#}
 

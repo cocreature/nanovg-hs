@@ -60,3 +60,19 @@ executable example00
                     , vector
   default-language:   Haskell2010
   c-sources:          cbits/glew.c
+
+test-suite nanovg-test
+  type:               exitcode-stdio-1.0
+  hs-source-dirs:     test
+  other-modules:      NanoVGSpec
+                      Contexts
+  main-is:            Spec.hs
+  build-depends:      base
+                    , containers
+                    , hspec
+                    , inline-c
+                    , linear
+                    , nanovg
+                    , QuickCheck
+  default-language:   Haskell2010
+  c-sources:          test/NanoVGSpec.c
