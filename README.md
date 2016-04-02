@@ -2,12 +2,14 @@
 
 Currently only the GL3 backend is supported.
 
-A large part of the example bundled with NanoVG is translated into
+A large part of the example bundled with
+[NanoVG](https://github.com/memononen/nanovg) is translated into
 Haskell and bundled as `example00`.
 
-Most of the bindings are just small wrappers around the raw C API. I’m
-open to higher level abstractions, see
-`textBreak[ines` in `NanoVG.hs`, but I don’t want to reinvent diagrams.
-Instead I’d like to write a diagrams backend that uses these bindings once I find time.
+Most of the bindings directly expose the corresponding
+[NanoVG](https://github.com/memononen/nanovg) so look there for more
+details on the usage.
+
+There is also a [diagrams backend](https://github.com/cocreature/diagrams-nanovg) using these bindings.
 
 Feel free to open issues if you have any ideas for improvements (or even better PRs :)).
