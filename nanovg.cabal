@@ -1,30 +1,25 @@
 name:                nanovg
-version:             0.1.0.0
+version:             0.1.0.1
 synopsis:            Haskell bindings for nanovg
--- A longer description of the package.
--- description:         
+description:         Raw bindings to the OpenGL vector graphics library NanoVG
 homepage:            https://github.com/cocreature/haskell-nanovg
-
 license:             ISC
 license-file:        LICENSE
 author:              Moritz Kiefer
 maintainer:          moritz.kiefer@purelyfunctional.org
--- A copyright notice.
--- copyright:           
+copyright:           2016 Moritz Kiefer
 category:            Graphics
 build-type:          Simple
--- Extra files to be distributed with the package, such as examples or a 
--- README.
--- extra-source-files:  
+extra-source-files:  README.md
 cabal-version:       >=1.10
+source-repository head
+  type:     git
+  location: https://github.com/cocreature/nanovg
 
 
 library
   exposed-modules:     NanoVG
                        NanoVG.Internal
-  -- Modules included in this library but not exported.
-  -- other-modules:       
-  -- Other library packages from which modules are imported.
   build-depends:       base >=4.8 && <4.9
                      , bytestring
                      , containers
