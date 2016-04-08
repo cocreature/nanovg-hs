@@ -1,8 +1,8 @@
 name:                nanovg
-version:             0.1.0.1
+version:             0.1.0.2
 synopsis:            Haskell bindings for nanovg
 description:         Raw bindings to the OpenGL vector graphics library NanoVG
-homepage:            https://github.com/cocreature/haskell-nanovg
+homepage:            https://github.com/cocreature/nanovg-hs
 license:             ISC
 license-file:        LICENSE
 author:              Moritz Kiefer
@@ -14,7 +14,7 @@ extra-source-files:  README.md
 cabal-version:       >=1.10
 source-repository head
   type:     git
-  location: https://github.com/cocreature/nanovg
+  location: https://github.com/cocreature/nanovg-hs
 
 
 library
