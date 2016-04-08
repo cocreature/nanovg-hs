@@ -1,5 +1,5 @@
 name:                nanovg
-version:             0.2.0.0
+version:             0.2.1.0
 synopsis:            Haskell bindings for nanovg
 description:         Raw bindings to the OpenGL vector graphics library NanoVG
 homepage:            https://github.com/cocreature/nanovg-hs
@@ -16,6 +16,10 @@ source-repository head
   type:     git
   location: https://github.com/cocreature/nanovg-hs
 
+flag examples
+  description: Build examples
+  default:     False
+  manual:      True
 
 library
   exposed-modules:     NanoVG
@@ -56,16 +60,19 @@ library
 executable example00
   hs-source-dirs:     example
   main-is:            Example.hs
-  build-depends:      base
-                    , containers
-                    , gl
-                    , GLFW-b
-                    , linear
-                    , monad-loops
-                    , nanovg
-                    , text
-                    , transformers
-                    , vector
+  if flag(examples)
+    build-depends:      base
+                      , containers
+                      , gl
+                      , GLFW-b
+                      , linear
+                      , monad-loops
+                      , nanovg
+                      , text
+                      , transformers
+                      , vector
+  else
+    buildable:        False
   default-language:   Haskell2010
   c-sources:          cbits/glew.c
 
