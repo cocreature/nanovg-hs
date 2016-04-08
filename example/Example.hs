@@ -16,7 +16,7 @@ import           Graphics.GL.Core32
 import           Graphics.UI.GLFW
 import           Linear.V4
 import           NanoVG as NVG
-import           NanoVG.Internal as Internal
+import           NanoVG.Internal.Text as Internal
 import           Prelude hiding (init)
 
 import           Foreign.C.Types

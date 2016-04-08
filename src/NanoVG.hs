@@ -1,20 +1,139 @@
 module NanoVG
-  (module NanoVG.Internal
-  ,textBreakLines
-  ,textGlyphPositions
-  ,text
+  ( FileName(..)
+  , Context(..)
+  , Extent(..)
+  , Solidity(..)
+  , LineCap(..)
+  , beginFrame
+  , cancelFrame
+  , endFrame
+  -- * Color utils
+  , Color(..)
+  , rgb
+  , rgbf
+  , rgba
+  , rgbaf
+  , lerpRGBA
+  , transRGBA
+  , transRGBAf
+  , hsl
+  , hsla
+  -- * State handling
+  , save
+  , restore
+  , reset
+  -- * Render styles
+  , strokeColor
+  , strokePaint
+  , fillColor
+  , fillPaint
+  , miterLimit
+  , strokeWidth
+  , lineCap
+  , lineJoin
+  , globalAlpha
+  -- * Transforms
+  , Transformation(..)
+  , resetTransform
+  , transform
+  , translate
+  , rotate
+  , skewX
+  , skewY
+  , scale
+  , currentTransform
+  , transformIdentity
+  , transformTranslate
+  , transformScale
+  , transformRotate
+  , transformSkewX
+  , transformSkewY
+  , transformMultiply
+  , transformPremultiply
+  , transformInverse
+  , transformPoint
+  , degToRad
+  , radToDeg
+  -- * Images
+  , Image(..)
+  , createImage
+  , createImageMem
+  , createImageRGBA
+  , updateImage
+  , imageSize
+  , deleteImage
+  -- * Paints
+  , Paint(..)
+  , linearGradient
+  , boxGradient
+  , radialGradient
+  , imagePattern
+  -- * Scissoring
+  , scissor
+  , intersectScissor
+  , resetScissor
+  -- * Paths
+  , beginPath
+  , moveTo
+  , lineTo
+  , bezierTo
+  , quadTo
+  , arcTo
+  , closePath
+  , Winding(..)
+  , pathWinding
+  , arc
+  , rect
+  , roundedRect
+  , ellipse
+  , circle
+  , fill
+  , stroke
+  -- * Text
+  , Font(..)
+  , createFont
+  , createFontMem
+  , findFont
+  , fontSize
+  , fontBlur
+  , textLetterSpacing
+  , textLineHeight
+  , Align(..)
+  , textAlign
+  , fontFaceId
+  , fontFace
+  , text
+  , textBox
+  , Bounds(..)
+  , textBounds
+  , textBoxBounds
+  , GlyphPosition(..)
+  , GlyphPositionPtr
+  , textGlyphPositions
+  , textMetrics
+  , TextRow(..)
+  , TextRowPtr
+  , textBreakLines
+  -- * GL
+  , CreateFlags(..)
+  , createGL3
+  , deleteGL3
+  , createImageFromHandleGL3
+  , imageHandleGL3
   ) where
 
-import qualified Data.Vector as V
 import           Control.Monad
 import qualified Data.Text as T
 import           Data.Text.Foreign
+import qualified Data.Vector as V
 import           Foreign.C.Types
 import           Foreign.Marshal.Alloc
 import           Foreign.Ptr
 import           Foreign.Storable
-import qualified NanoVG.Internal as Internal
-import           NanoVG.Internal hiding (textBreakLines,textGlyphPositions,text)
+import           NanoVG.Internal
+import           NanoVG.Internal.GL3
+import qualified NanoVG.Internal.Text as Internal
+import           NanoVG.Internal.Text hiding (textBreakLines,textGlyphPositions,text)
 
 -- | High level wrapper around NanoVG.Internal.textBreakLines
 -- This uses the fonts for width calculations so make sure you have them setup properly

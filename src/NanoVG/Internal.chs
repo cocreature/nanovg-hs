@@ -1,21 +1,13 @@
 module NanoVG.Internal
   ( FileName(..)
   , Image(..)
-  , Font(..)
   , Context(..)
   , Transformation(..)
   , Extent(..)
   , Color(..)
   , Paint(..)
-  , Bounds(..)
-  , GlyphPosition(..)
-  , GlyphPositionPtr
-  , TextRow(..)
-  , TextRowPtr
-  , CreateFlags(..)
   , Solidity(..)
   , LineCap(..)
-  , Align(..)
   , Winding(..)
   , beginFrame
   , cancelFrame
@@ -97,29 +89,6 @@ module NanoVG.Internal
   , circle
   , fill
   , stroke
-  -- * Text
-  , createFont
-  , createFontMem
-  , findFont
-  , fontSize
-  , fontBlur
-  , textLetterSpacing
-  , textLineHeight
-  , textAlign
-  , fontFaceId
-  , fontFace
-  , text
-  , textBox
-  , textBounds
-  , textBoxBounds
-  , textGlyphPositions
-  , textMetrics
-  , textBreakLines
-  -- * GL
-  , createGL3
-  , deleteGL3
-  , createImageFromHandleGL3
-  , imageHandleGL3
   ) where
 
 import           Foreign.C.Types
@@ -132,10 +101,8 @@ import           NanoVG.Internal.Scissor
 import           NanoVG.Internal.Image
 import           NanoVG.Internal.State
 import           NanoVG.Internal.Style
-import           NanoVG.Internal.Text
 import           NanoVG.Internal.Transformation
 import           NanoVG.Internal.Types
-import           NanoVG.Internal.GL3
 
 {#pointer *NVGcontext as Context newtype nocode#}
 
