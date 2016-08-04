@@ -1,5 +1,5 @@
 name:                nanovg
-version:             0.3.0.0
+version:             0.5.0.0
 synopsis:            Haskell bindings for nanovg
 description:         Raw bindings to the OpenGL vector graphics library NanoVG
 homepage:            https://github.com/cocreature/nanovg-hs
@@ -10,7 +10,9 @@ maintainer:          moritz.kiefer@purelyfunctional.org
 copyright:           2016 Moritz Kiefer
 category:            Graphics
 build-type:          Simple
-extra-source-files:  README.md
+extra-source-files:
+  README.md
+  CHANGELOG.md
 cabal-version:       >=1.10
 source-repository head
   type:     git
@@ -24,23 +26,23 @@ flag examples
 library
   exposed-modules:     NanoVG
                        NanoVG.Internal
+                       NanoVG.Internal.Color
                        NanoVG.Internal.Context
                        NanoVG.Internal.FFIHelpers
-                       NanoVG.Internal.Text
-                       NanoVG.Internal.Types
-                       NanoVG.Internal.Color
-                       NanoVG.Internal.State
-                       NanoVG.Internal.Style
+                       NanoVG.Internal.FixedVector
+                       NanoVG.Internal.GL3
+                       NanoVG.Internal.Image
                        NanoVG.Internal.Paint
-                       NanoVG.Internal.Transformation
                        NanoVG.Internal.Path
                        NanoVG.Internal.Scissor
-                       NanoVG.Internal.Image
-                       NanoVG.Internal.GL3
+                       NanoVG.Internal.State
+                       NanoVG.Internal.Style
+                       NanoVG.Internal.Text
+                       NanoVG.Internal.Transformation
+                       NanoVG.Internal.Types
   build-depends:       base >=4.8 && <5.0
                      , bytestring >= 0.10 && < 0.11
                      , containers >= 0.5 && < 0.6
-                     , linear >= 1.20 && < 1.21
                      , text >= 1.2 && < 1.3
                      , vector >= 0.11 && < 0.12
   hs-source-dirs:      src
@@ -66,7 +68,6 @@ executable example00
                       , containers
                       , gl
                       , GLFW-b
-                      , linear
                       , monad-loops
                       , nanovg
                       , text
@@ -87,7 +88,6 @@ test-suite nanovg-test
                     , containers
                     , hspec
                     , inline-c
-                    , linear
                     , nanovg
                     , QuickCheck
   default-language:   Haskell2010

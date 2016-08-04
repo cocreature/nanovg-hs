@@ -13,8 +13,7 @@ import qualified Data.Set as S
 import qualified Data.Text as T
 import qualified Data.Vector as V
 import           Graphics.GL.Core32
-import           Graphics.UI.GLFW
-import           Linear.V4
+import           Graphics.UI.GLFW hiding (Image)
 import           NanoVG as NVG
 import           NanoVG.Internal.Text as Internal
 import           Prelude hiding (init)

@@ -89,20 +89,26 @@ module NanoVG.Internal
   , circle
   , fill
   , stroke
+  -- * Vector types
+  , V2(..)
+  , V3(..)
+  , V4(..)
+  , M23
   ) where
 
-import           Foreign.C.Types
+import Foreign.C.Types
 
-import           NanoVG.Internal.Color
-import           NanoVG.Internal.Context
-import           NanoVG.Internal.Paint
-import           NanoVG.Internal.Path
-import           NanoVG.Internal.Scissor
-import           NanoVG.Internal.Image
-import           NanoVG.Internal.State
-import           NanoVG.Internal.Style
-import           NanoVG.Internal.Transformation
-import           NanoVG.Internal.Types
+import NanoVG.Internal.Color
+import NanoVG.Internal.Context
+import NanoVG.Internal.FixedVector
+import NanoVG.Internal.Image
+import NanoVG.Internal.Paint
+import NanoVG.Internal.Path
+import NanoVG.Internal.Scissor
+import NanoVG.Internal.State
+import NanoVG.Internal.Style
+import NanoVG.Internal.Transformation
+import NanoVG.Internal.Types
 
 {#pointer *NVGcontext as Context newtype nocode#}
 

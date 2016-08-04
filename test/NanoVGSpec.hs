@@ -17,9 +17,6 @@ import Foreign.Storable
 import Test.Hspec
 import NanoVG
 import Test.QuickCheck
-import           Linear.V2
-import           Linear.V3
-import Linear.V4
 
 C.context (C.baseCtx <> nanoVGCtx)
 C.include "nanovg.h"

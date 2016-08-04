@@ -6,12 +6,11 @@ import Foreign.Marshal.Alloc
 import Foreign.Marshal.Utils
 import Foreign.Ptr
 import Foreign.Storable
-import Linear.V2
-
 import NanoVG.Internal.Color
 import NanoVG.Internal.Context
-import NanoVG.Internal.Types
+import NanoVG.Internal.FixedVector
 import NanoVG.Internal.Transformation
+import NanoVG.Internal.Types
 
 #include "nanovg.h"
 #include "nanovg_wrapper.h"

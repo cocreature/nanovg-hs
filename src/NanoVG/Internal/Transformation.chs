@@ -6,11 +6,8 @@ import Foreign.Marshal.Alloc
 import Foreign.Marshal.Utils
 import Foreign.Ptr
 import Foreign.Storable
-import Linear.Matrix
-import Linear.V2
-import Linear.V3
-
 import NanoVG.Internal.Context
+import NanoVG.Internal.FixedVector
 
 #include "nanovg.h"
 

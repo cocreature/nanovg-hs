@@ -2,19 +2,18 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 module NanoVG.Internal.Text where
 
-import qualified Data.Set as S
 import           Data.ByteString hiding (null)
+import qualified Data.Set as S
 import qualified Data.Text as T
 import           Foreign.C.Types
 import           Foreign.Marshal.Alloc
 import           Foreign.Ptr
 import           Foreign.Storable
-import           Linear.V4
-import           Prelude hiding (null)
-
-import           NanoVG.Internal.FFIHelpers
 import           NanoVG.Internal.Context
+import           NanoVG.Internal.FFIHelpers
+import           NanoVG.Internal.FixedVector
 import           NanoVG.Internal.Types
+import           Prelude hiding (null)
 
 #include "nanovg.h"
 

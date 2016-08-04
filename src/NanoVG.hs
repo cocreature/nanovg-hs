@@ -120,6 +120,11 @@ module NanoVG
   , deleteGL3
   , createImageFromHandleGL3
   , imageHandleGL3
+  -- * Vector types
+  , V2(..)
+  , V3(..)
+  , V4(..)
+  , M23
   ) where
 
 import           Control.Monad
