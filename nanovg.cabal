@@ -64,6 +64,7 @@ library
   ghc-options:         -Wall
   extra-libraries:     GLU, GL, m, GLEW
   ghc-options:         -pgml gcc "-optl-Wl,--whole-archive" "-optl-Wl,-lGLEW" "-optl-Wl,--no-whole-archive"
+  build-tools:         c2hs
 
 executable example00
   hs-source-dirs:     example
