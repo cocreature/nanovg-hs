@@ -54,6 +54,8 @@ install:
  - rm -f cabal.project.freeze
  - cabal new-build -w ${HC} ${TEST} ${BENCH} --dep -j2
  - cabal new-build -w ${HC} --disable-tests --disable-benchmarks --dep -j2
+ - cabal install c2hs
+ - PATH=/home/travis/.cabal/bin:$PATH
 
 # Here starts the actual work to be performed for the package under test;
 # any command which exits with a non-zero exit code causes the build to fail.
