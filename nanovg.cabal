@@ -51,9 +51,12 @@ library
   default-language:    Haskell2010
   include-dirs:        nanovg/src
                        cbits
-  includes:            nanovg.h
+  install-includes:    fontstash.h
+                       nanovg.h
                        nanovg_gl.h
                        nanovg_wrapper.h
+                       stb_image.h
+                       stb_truetype.h
   c-sources:           nanovg/src/nanovg.c
                        cbits/nanovg_wrapper.c
                        cbits/nanovg_gl.c
