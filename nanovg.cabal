@@ -42,7 +42,7 @@ library
                        NanoVG.Internal.Text
                        NanoVG.Internal.Transformation
                        NanoVG.Internal.Types
-  build-depends:       base >=4.8 && <5.0
+  build-depends:       base >= 4.7 && <5.0
                      , bytestring >= 0.10 && < 0.11
                      , containers >= 0.5 && < 0.6
                      , text >= 1.2 && < 1.3
