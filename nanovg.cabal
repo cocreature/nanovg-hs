@@ -62,8 +62,13 @@ library
                        cbits/nanovg_gl.c
   cc-options:          -DNDEBUG
   ghc-options:         -Wall
-  extra-libraries:     GLU, GL, m, GLEW
-  ghc-options:         -pgml gcc "-optl-Wl,--whole-archive" "-optl-Wl,-lGLEW" "-optl-Wl,--no-whole-archive"
+  if os(windows)
+    extra-libraries:     GLU, GL, m, GLEW
+    ghc-options:         -pgml gcc "-optl-Wl,--whole-archive" "-optl-Wl,-lGLEW" "-optl-Wl,--no-whole-archive"
+    cc-options:          -Dmingw32_HOST_OS
+  if os(osx)
+    frameworks:          OpenGL
+    cc-options:          -Ddarwin_HOST_OS
   build-tools:         c2hs
 
 executable example00
