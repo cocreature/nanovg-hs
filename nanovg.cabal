@@ -62,8 +62,12 @@ library
                        cbits/nanovg_gl.c
   cc-options:          -DNDEBUG
   ghc-options:         -Wall
-  extra-libraries:     GLU, GL, m, GLEW
-  ghc-options:         -pgml gcc "-optl-Wl,--whole-archive" "-optl-Wl,-lGLEW" "-optl-Wl,--no-whole-archive"
+  if os(osx)
+    frameworks:          OpenGL
+    cc-options:          -Ddarwin_HOST_OS
+  else
+    extra-libraries:     GLU, GL, m, GLEW
+    ghc-options:         -pgml gcc "-optl-Wl,--whole-archive" "-optl-Wl,-lGLEW" "-optl-Wl,--no-whole-archive"
   build-tools:         c2hs
 
 executable example00
@@ -83,6 +87,8 @@ executable example00
     buildable:        False
   default-language:   Haskell2010
   c-sources:          cbits/glew.c
+  if os(osx)
+    cc-options:          -Ddarwin_HOST_OS
 
 test-suite nanovg-test
   type:               exitcode-stdio-1.0

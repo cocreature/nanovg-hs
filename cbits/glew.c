@@ -1,3 +1,4 @@
+#if !defined(darwin_HOST_OS)
 #include <GL/glew.h>
 #include <stdio.h>
 #include "nanovg.h"
@@ -10,3 +11,9 @@ void initGlew() {
         /* return -1; */
     }
 }
+
+#else
+void initGlew() {
+    // This space intentionally left blank.
+}
+#endif

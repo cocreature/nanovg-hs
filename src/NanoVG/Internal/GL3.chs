@@ -11,7 +11,11 @@ import           NanoVG.Internal.FFIHelpers
 -- For now only the GL3 backend is supported
 #define NANOVG_GL3
 -- We need to include this to define GLuint
+#if defined(darwin_HOST_OS)
+#include <OpenGL/gl3.h>
+#else
 #include "GL/glew.h"
+#endif
 #include "nanovg.h"
 #include "nanovg_gl.h"
 
