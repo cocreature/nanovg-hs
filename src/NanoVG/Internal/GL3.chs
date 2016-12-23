@@ -13,13 +13,11 @@ import           NanoVG.Internal.FFIHelpers
 -- We need to include this to define GLuint
 #if defined(darwin_HOST_OS)
 #include <OpenGL/gl3.h>
-#include "nanovg.h"
-#include "nanovg_gl.h"
 #else
 #include "GL/glew.h"
+#endif
 #include "nanovg.h"
 #include "nanovg_gl.h"
-#endif
 
 {#pointer *NVGcontext as Context newtype nocode#}
 
