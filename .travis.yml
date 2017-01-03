@@ -66,9 +66,6 @@ before_install:
  - unset CC
  - PATH=/opt/ghc/bin:/opt/ghc-ppa-tools/bin:$PATH
  - PKGNAME='nanovg'
- - mkdir -p $HOME/bin
- - ln -s /usr/bin/gcc-5 $HOME/bin/gcc
- - PATH=$HOME/bin:$PATH
 
 install:
  - cabal --version
@@ -103,7 +100,7 @@ script:
  - cabal new-build -w ${HC} --disable-tests --disable-benchmarks
  # this builds all libraries and executables (including tests/benchmarks)
  # - rm -rf ./dist-newstyle
- - cabal new-build -w ${HC} ${TEST} ${BENCH}
+ - cabal new-build --with-gcc gcc-5 --ghc-options "-pgmc=gcc-5" -w ${HC} ${TEST} ${BENCH}
 
  # there's no 'cabal new-test' yet, so let's emulate for now
  - TESTS=( $(awk 'tolower($0) ~ /^test-suite / { print $2 }' *.cabal) )
