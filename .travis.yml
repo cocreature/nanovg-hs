@@ -65,10 +65,14 @@ before_install:
  - unset CC
  - PATH=/opt/ghc/bin:/opt/ghc-ppa-tools/bin:$PATH
  - PKGNAME='nanovg'
+ - mkdir -p $HOME/bin
+ - ln -s /usr/bin/gcc-5 $HOME/bin/gcc
+ - PATH=$HOME/bin:$PATH
 
 install:
  - cabal --version
  - echo "$(${HC} --version) [$(${HC} --print-project-git-commit-id 2> /dev/null || echo '?')]"
+ - gcc --version
  - BENCH=${BENCH---enable-benchmarks}
  - TEST=${TEST---enable-tests}
  - travis_retry cabal update -v
