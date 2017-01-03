@@ -70,7 +70,6 @@ before_install:
 install:
  - cabal --version
  - echo "$(${HC} --version) [$(${HC} --print-project-git-commit-id 2> /dev/null || echo '?')]"
- - gcc --version
  - BENCH=${BENCH---enable-benchmarks}
  - TEST=${TEST---enable-tests}
  - travis_retry cabal update -v
@@ -78,8 +77,8 @@ install:
  - rm -fv cabal.project.local
  - "echo 'packages: .' > cabal.project"
  - rm -f cabal.project.freeze
- - cabal new-build -w ${HC} ${TEST} ${BENCH} --dep -j2
- - cabal new-build -w ${HC} --disable-tests --disable-benchmarks --dep -j2
+ - cabal new-build --with-gcc gcc-5 --ghc-options "-pgmc=gcc-5" -w ${HC} ${TEST} ${BENCH} --dep -j2
+ - cabal new-build --with-gcc gcc-5 --ghc-options "-pgmc=gcc-5" -w ${HC} --disable-tests --disable-benchmarks --dep -j2
 
 # Here starts the actual work to be performed for the package under test;
 # any command which exits with a non-zero exit code causes the build to fail.
@@ -97,7 +96,7 @@ script:
  - "echo 'packages: .' > cabal.project"
  # this builds all libraries and executables (without tests/benchmarks)
  - rm -f cabal.project.freeze
- - cabal new-build -w ${HC} --disable-tests --disable-benchmarks
+ - cabal new-build --with-gcc gcc-5 --ghc-options "-pgmc=gcc-5" -w ${HC} --disable-tests --disable-benchmarks
  # this builds all libraries and executables (including tests/benchmarks)
  # - rm -rf ./dist-newstyle
  - cabal new-build --with-gcc gcc-5 --ghc-options "-pgmc=gcc-5" -w ${HC} ${TEST} ${BENCH}
