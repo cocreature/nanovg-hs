@@ -1,6 +1,9 @@
 {-# LANGUAGE DeriveFunctor, DeriveFoldable, DeriveTraversable #-}
 module NanoVG.Internal.FixedVector where
 
+import Data.Foldable (Foldable)
+import Data.Traversable (Traversable)
+
 -- | Vector of 2 strict elements
 data V2 a =
   V2 !a
