@@ -127,6 +127,7 @@ module NanoVG
   , M23
   ) where
 
+import           Data.Functor ((<$>))
 import           Control.Monad
 import qualified Data.Text as T
 import           Data.Text.Foreign
