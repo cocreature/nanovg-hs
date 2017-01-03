@@ -4,7 +4,7 @@
 module NanoVGSpec where
 
 import           Contexts
-import           Control.Applicative (pure)
+import           Control.Applicative
 import           Control.Monad
 import qualified Data.Map as M
 import           Data.Monoid
