@@ -3,20 +3,21 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 module NanoVGSpec where
 
-import Control.Monad
+import           Contexts
+import           Control.Applicative (pure)
+import           Control.Monad
+import qualified Data.Map as M
+import           Data.Monoid
+import           Foreign.C.Types
+import           Foreign.Marshal.Alloc
+import           Foreign.Ptr
+import           Foreign.Storable
 import qualified Language.C.Inline as C
 import qualified Language.C.Inline.Context as C
-import Contexts
-import Data.Monoid
 import qualified Language.C.Types as C
-import qualified Data.Map as M
-import Foreign.Marshal.Alloc
-import Foreign.Ptr
-import Foreign.C.Types
-import Foreign.Storable
-import Test.Hspec
-import NanoVG
-import Test.QuickCheck
+import           NanoVG
+import           Test.Hspec
+import           Test.QuickCheck
 
 C.context (C.baseCtx <> nanoVGCtx)
 C.include "nanovg.h"

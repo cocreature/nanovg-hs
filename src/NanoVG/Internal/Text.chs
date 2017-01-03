@@ -2,6 +2,7 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 module NanoVG.Internal.Text where
 
+import           Control.Applicative (pure)
 import           Data.ByteString hiding (null)
 import qualified Data.Set as S
 import qualified Data.Text as T

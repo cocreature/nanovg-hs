@@ -1,6 +1,7 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 module NanoVG.Internal.Transformation where
 
+import Control.Applicative (pure)
 import Foreign.C.Types
 import Foreign.Marshal.Alloc
 import Foreign.Marshal.Utils

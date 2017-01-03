@@ -1,6 +1,7 @@
 {-# LANGUAGE RecordWildCards #-}
 module NanoVG.Internal.Paint where
 
+import Control.Applicative (pure)
 import Foreign.C.Types
 import Foreign.Marshal.Alloc
 import Foreign.Marshal.Utils

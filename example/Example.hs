@@ -2,6 +2,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Main where
 
+import           Control.Applicative (pure)
 import           Control.Monad
 import           Control.Monad.Loops
 import           Control.Monad.Trans.Maybe

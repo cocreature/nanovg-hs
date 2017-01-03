@@ -1,5 +1,6 @@
 module NanoVG.Internal.Color where
 
+import Control.Applicative (pure)
 import Foreign.C.Types
 import Foreign.Marshal.Alloc
 import Foreign.Ptr
