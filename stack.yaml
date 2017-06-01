@@ -1,9 +1,9 @@
-resolver: nightly-2016-07-17
+resolver: lts-8.15
 packages:
 - '.'
 extra-deps:
-- GLFW-b-1.4.8.0
-- bindings-GLFW-3.1.2.1
+- GLFW-b-1.4.8.1
+- bindings-GLFW-3.1.2.2
 flags:
   nanovg:
     examples: True
