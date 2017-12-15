@@ -25,14 +25,21 @@ flag examples
   default:     False
   manual:      True
 
+flag gles3
+  description: Build for GLES3. This deactivates GL3 support.
+  default:     False
+  manual:      True
+
 library
   exposed-modules:     NanoVG
                        NanoVG.Internal
                        NanoVG.Internal.Color
+                       NanoVG.Internal.CreateContext
                        NanoVG.Internal.Context
                        NanoVG.Internal.FFIHelpers
                        NanoVG.Internal.FixedVector
                        NanoVG.Internal.GL3
+                       NanoVG.Internal.GLES3
                        NanoVG.Internal.Image
                        NanoVG.Internal.Paint
                        NanoVG.Internal.Path
@@ -68,6 +75,9 @@ library
   else
     extra-libraries:     GLU, GL, m, GLEW
     pkgconfig-depends: glew
+  if flag(gles3)
+    cpp-options:       -DGLES_3
+    cc-options:        -DGLES_3
   build-tools:         c2hs
 
 executable example00
