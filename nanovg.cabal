@@ -67,7 +67,7 @@ library
     cc-options:          -Ddarwin_HOST_OS
   else
     extra-libraries:     GLU, GL, m, GLEW
-    ghc-options:         -pgml gcc "-optl-Wl,--whole-archive" "-optl-Wl,-lGLEW" "-optl-Wl,--no-whole-archive"
+    pkgconfig-depends: glew
   build-tools:         c2hs
 
 executable example00
