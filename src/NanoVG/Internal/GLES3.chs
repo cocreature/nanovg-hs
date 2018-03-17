@@ -4,7 +4,7 @@ import qualified Data.Set as S
 import           Data.Word
 import           Foreign.C.Types
 
--- import           Nanovg.Internal.GL3 (CreateFlags(..))
+import           NanoVG.Internal.GL3 (CreateFlags(..))
 import           NanoVG.Internal.Types
 import           NanoVG.Internal.Context
 import           NanoVG.Internal.FFIHelpers
@@ -22,9 +22,9 @@ import           NanoVG.Internal.FFIHelpers
 
 {#pointer *NVGcontext as Context newtype nocode#}
 
-{#enum NVGcreateFlags as CreateFlags
-         {underscoreToCase} with prefix = "NVG_"
-         deriving (Show,Read,Eq,Ord)#}
+-- {#enum NVGcreateFlags as CreateFlags
+--          {underscoreToCase} with prefix = "NVG_"
+--          deriving (Show,Read,Eq,Ord)#}
 
 {#fun unsafe nvgCreateGLES3 as createGLES3
         {bitMask`S.Set CreateFlags'} -> `Context'#}
@@ -33,8 +33,8 @@ import           NanoVG.Internal.FFIHelpers
 
 type GLuint = Word32
 
-{#fun unsafe nvglCreateImageFromHandleGLES3 as createImageFromHandleGLES3
-        {`Context',fromIntegral`GLuint',`CInt',`CInt',`CreateFlags'} -> `Image'Image#}
-
-{#fun unsafe nvglImageHandleGLES3 as imageHandleGLES3
-        {`Context',imageHandle`Image'} -> `GLuint'fromIntegral#}
+-- {#fun unsafe nvglCreateImageFromHandleGLES3 as createImageFromHandleGLES3
+--         {`Context',fromIntegral`GLuint',`CInt',`CInt',`CreateFlags'} -> `Image'Image#}
+-- 
+-- {#fun unsafe nvglImageHandleGLES3 as imageHandleGLES3
+--         {`Context',imageHandle`Image'} -> `GLuint'fromIntegral#}
