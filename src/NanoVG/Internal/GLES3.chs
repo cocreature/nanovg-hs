@@ -9,7 +9,8 @@ import           NanoVG.Internal.Types
 import           NanoVG.Internal.Context
 import           NanoVG.Internal.FFIHelpers
 
--- For now only the GLES3 backend is supported
+-- For now only the GL3 and GLES3 backends are supported
+#define NANOVG_GL3
 #define NANOVG_GLES3
 -- We need to include this to define GLuint
 #if defined(darwin_HOST_OS)
@@ -33,8 +34,19 @@ import           NanoVG.Internal.FFIHelpers
 
 type GLuint = Word32
 
--- {#fun unsafe nvglCreateImageFromHandleGLES3 as createImageFromHandleGLES3
---         {`Context',fromIntegral`GLuint',`CInt',`CInt',`CreateFlags'} -> `Image'Image#}
--- 
--- {#fun unsafe nvglImageHandleGLES3 as imageHandleGLES3
---         {`Context',imageHandle`Image'} -> `GLuint'fromIntegral#}
+toCInt :: CreateFlags -> CInt
+toCInt = fromIntegral . fromEnum
+
+fromCInt :: CInt -> CreateFlags
+fromCInt = toEnum . fromIntegral
+
+{#fun unsafe nvglCreateImageFromHandleGLES3 as createImageFromHandleGLES3
+        { `Context'
+        , fromIntegral`GLuint'
+        , `CInt'
+        , `CInt'
+        , toCInt `CreateFlags' fromCInt
+        } -> `Image'Image#}
+
+{#fun unsafe nvglImageHandleGLES3 as imageHandleGLES3
+        {`Context',imageHandle`Image'} -> `GLuint'fromIntegral#}
