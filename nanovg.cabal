@@ -33,6 +33,7 @@ library
                        NanoVG.Internal.FFIHelpers
                        NanoVG.Internal.FixedVector
                        NanoVG.Internal.GL3
+                       NanoVG.Internal.GLES3
                        NanoVG.Internal.Image
                        NanoVG.Internal.Paint
                        NanoVG.Internal.Path
