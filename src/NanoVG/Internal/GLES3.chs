@@ -4,6 +4,7 @@ import qualified Data.Set as S
 import           Data.Word
 import           Foreign.C.Types
 
+-- import           Nanovg.Internal.GL3 (CreateFlags(..))
 import           NanoVG.Internal.Types
 import           NanoVG.Internal.Context
 import           NanoVG.Internal.FFIHelpers
