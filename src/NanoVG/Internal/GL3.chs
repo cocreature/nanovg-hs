@@ -1,7 +1,5 @@
 module NanoVG.Internal.GL3 where
 
-#ifndef GLES3
-
 import qualified Data.Set as S
 import           Data.Word
 import           Foreign.C.Types
@@ -40,5 +38,3 @@ type GLuint = Word32
 
 {#fun unsafe nvglImageHandleGL3 as imageHandleGL3
         {`Context',imageHandle`Image'} -> `GLuint'fromIntegral#}
-
-#endif
