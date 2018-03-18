@@ -76,6 +76,7 @@ library
     pkgconfig-depends: glew
   if flag(gles3)
     cpp-options:       -DGLES_3
+    cc-options:        -DGLES_3
   build-tools:         c2hs
 
 executable example00

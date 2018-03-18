@@ -1,4 +1,4 @@
-#if defined(GLES3)
+#if defined(GLES_3)
 #define NANOVG_GLES3_IMPLEMENTATION
 #else
 #define NANOVG_GL3_IMPLEMENTATION

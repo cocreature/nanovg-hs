@@ -11,8 +11,7 @@ import           NanoVG.Internal.FFIHelpers
 -- For now only the GL3 and the GLES3 backends are supported
 #ifndef GLES_3
 
-#define NANOVG_GL3 1
-#define NANOVG_GL_USE_UNIFORMBUFFER
+#define NANOVG_GL3
 
 #endif
 -- We need to include this to define GLuint
