@@ -9,8 +9,12 @@ import           NanoVG.Internal.Context
 import           NanoVG.Internal.FFIHelpers
 
 -- For now only the GL3 and the GLES3 backends are supported
+#ifndef GLES_3
+
 #define NANOVG_GL3 1
 #define NANOVG_GL_USE_UNIFORMBUFFER
+
+#endif
 -- We need to include this to define GLuint
 #if defined(darwin_HOST_OS)
 #include <OpenGL/gl3.h>
@@ -20,11 +24,13 @@ import           NanoVG.Internal.FFIHelpers
 #include "nanovg.h"
 #include "nanovg_gl.h"
 
-{#pointer *NVGcontext as Context newtype nocode#}
-
 {#enum NVGcreateFlags as CreateFlags
          {underscoreToCase} with prefix = "NVG_"
          deriving (Show,Read,Eq,Ord)#}
+
+#ifndef GLES_3
+
+{#pointer *NVGcontext as Context newtype nocode#}
 
 {#fun unsafe nvgCreateGL3 as createGL3
         {bitMask`S.Set CreateFlags'} -> `Context'#}
@@ -38,3 +44,5 @@ type GLuint = Word32
 
 {#fun unsafe nvglImageHandleGL3 as imageHandleGL3
         {`Context',imageHandle`Image'} -> `GLuint'fromIntegral#}
+
+#endif
