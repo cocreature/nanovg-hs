@@ -1,6 +1,6 @@
 module NanoVG.Internal.GL3 where
 
-#if not defined(GLES3)
+#ifndef GLES3
 
 import qualified Data.Set as S
 import           Data.Word

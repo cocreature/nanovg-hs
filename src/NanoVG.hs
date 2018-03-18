@@ -1,3 +1,5 @@
+{-# LANGUAGE CPP #-}
+
 module NanoVG
   ( FileName(..)
   , Context(..)
@@ -116,14 +118,17 @@ module NanoVG
   , textBreakLines
   -- * GL
   , CreateFlags(..)
+#if defined(GLES3)
+  , createGLES3
+  , deleteGLES3
+  , createImageFromHandleGLES3
+  , imageHandleGLES3
+#else
   , createGL3
   , deleteGL3
   , createImageFromHandleGL3
   , imageHandleGL3
-  , createGLES3
-  , deleteGLES3
-  -- , createImageFromHandleGLES3
-  -- , imageHandleGLES3
+#endif
   -- * Vector types
   , V2(..)
   , V3(..)

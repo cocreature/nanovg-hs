@@ -1,5 +1,8 @@
-#define NANOVG_GL_IMPLEMENTATION
-// #define NANOVG_GLES3_IMPLEMENTATION
+#if defined(GLES3)
+#define NANOVG_GLES3_IMPLEMENTATION
+#else
+#define NANOVG_GL3_IMPLEMENTATION
+#endif
 // This is used to link the implementation
 #if defined(darwin_HOST_OS)
 #include <OpenGL/gl3.h>
