@@ -1,4 +1,4 @@
-// #define NANOVG_GL3_IMPLEMENTATION
+#define NANOVG_GL_IMPLEMENTATION
 // #define NANOVG_GLES3_IMPLEMENTATION
 // This is used to link the implementation
 #if defined(darwin_HOST_OS)
