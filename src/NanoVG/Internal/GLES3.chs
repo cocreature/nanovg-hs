@@ -1,5 +1,7 @@
 module NanoVG.Internal.GLES3 where
 
+#if defined(GLES3)
+
 import qualified Data.Set as S
 import           Data.Word
 import           Foreign.C.Types
@@ -49,3 +51,5 @@ fromCInt = toEnum . fromIntegral
 
 {#fun unsafe nvglImageHandleGLES3 as imageHandleGLES3
         {`Context',imageHandle`Image'} -> `GLuint'fromIntegral#}
+
+#endif

@@ -25,6 +25,11 @@ flag examples
   default:     False
   manual:      True
 
+flag gles3
+  description: Build for GLES3
+  default:     False
+  manual:      True
+
 library
   exposed-modules:     NanoVG
                        NanoVG.Internal
@@ -69,6 +74,8 @@ library
   else
     extra-libraries:     GLU, GL, m, GLEW
     pkgconfig-depends: glew
+  if flag(gles3)
+    cpp-options:       -DGLES3
   build-tools:         c2hs
 
 executable example00
