@@ -4,7 +4,7 @@ import qualified Data.Set as S
 import           Data.Word
 import           Foreign.C.Types
 
-import           NanoVG.Internal.GL3 (CreateFlags(..))
+import           NanoVG.Internal.CreateFlags
 import           NanoVG.Internal.Types
 import           NanoVG.Internal.Context
 import           NanoVG.Internal.FFIHelpers
@@ -21,10 +21,6 @@ import           NanoVG.Internal.FFIHelpers
 #include "nanovg_gl.h"
 
 {#pointer *NVGcontext as Context newtype nocode#}
-
--- {#enum NVGcreateFlags as CreateFlags
---          {underscoreToCase} with prefix = "NVG_"
---          deriving (Show,Read,Eq,Ord)#}
 
 {#fun unsafe nvgCreateGLES3 as createGLES3
         {bitMask`S.Set CreateFlags'} -> `Context'#}
