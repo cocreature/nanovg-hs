@@ -1,6 +1,12 @@
-module NanoVG.Internal.CreateFlags where
+module NanoVG.Internal.CreateContext where
 
+import Foreign.C.Types
+import Data.Word (Word32(..))
+
+#include "nanovg.h"
 #include "nanovg_gl.h"
+
+{#pointer *NVGcontext as Context newtype nocode#}
 
 {#enum NVGcreateFlags as CreateFlags
          {underscoreToCase} with prefix = "NVG_"

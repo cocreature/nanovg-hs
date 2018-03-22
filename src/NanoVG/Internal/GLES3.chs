@@ -4,7 +4,7 @@ import qualified Data.Set as S
 import           Data.Word
 import           Foreign.C.Types
 
-import           NanoVG.Internal.CreateFlags
+import           NanoVG.Internal.CreateContext
 import           NanoVG.Internal.Types
 import           NanoVG.Internal.Context
 import           NanoVG.Internal.FFIHelpers

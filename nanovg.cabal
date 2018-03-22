@@ -34,6 +34,7 @@ library
   exposed-modules:     NanoVG
                        NanoVG.Internal
                        NanoVG.Internal.Color
+                       NanoVG.Internal.CreateContext
                        NanoVG.Internal.Context
                        NanoVG.Internal.FFIHelpers
                        NanoVG.Internal.FixedVector
