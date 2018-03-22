@@ -122,7 +122,7 @@ module NanoVG
   , deleteGLES3
   , createImageFromHandleGLES3
   , imageHandleGLES3
-#if defined(GL_2)
+#elif defined(GL_2)
   , createGL2
   , deleteGL2
   , createImageFromHandleGL2
