@@ -21,8 +21,6 @@ import           NanoVG.Internal.FFIHelpers
 #include "nanovg.h"
 #include "nanovg_gl.h"
 
-{#pointer *NVGcontext as Context newtype nocode#}
-
 {#fun unsafe nvgCreateGL3 as createGL3
         {bitMask`S.Set CreateFlags'} -> `Context'#}
 {#fun unsafe nvgDeleteGL3 as deleteGL3
