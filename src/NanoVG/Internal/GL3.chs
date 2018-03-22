@@ -28,10 +28,13 @@ import           NanoVG.Internal.FFIHelpers
 {#fun unsafe nvgDeleteGL3 as deleteGL3
         {`Context'} -> `()'#}
 
-type GLuint = Word32
-
 {#fun unsafe nvglCreateImageFromHandleGL3 as createImageFromHandleGL3
-        {`Context',fromIntegral`GLuint',`CInt',`CInt',`CreateFlags'} -> `Image'Image#}
+        { `Context'
+        , fromIntegral`GLuint'
+        , `CInt'
+        , `CInt'
+        , toCInt `CreateFlags' fromCInt
+        } -> `Image'Image#}
 
 {#fun unsafe nvglImageHandleGL3 as imageHandleGL3
         {`Context',imageHandle`Image'} -> `GLuint'fromIntegral#}

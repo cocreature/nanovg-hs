@@ -27,14 +27,6 @@ import           NanoVG.Internal.FFIHelpers
 {#fun unsafe nvgDeleteGLES3 as deleteGLES3
         {`Context'} -> `()'#}
 
-type GLuint = Word32
-
-toCInt :: CreateFlags -> CInt
-toCInt = fromIntegral . fromEnum
-
-fromCInt :: CInt -> CreateFlags
-fromCInt = toEnum . fromIntegral
-
 {#fun unsafe nvglCreateImageFromHandleGLES3 as createImageFromHandleGLES3
         { `Context'
         , fromIntegral`GLuint'
