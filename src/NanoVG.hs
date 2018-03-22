@@ -122,6 +122,11 @@ module NanoVG
   , deleteGLES3
   , createImageFromHandleGLES3
   , imageHandleGLES3
+#elif defined(GL_2)
+  , createGL2
+  , deleteGL2
+  , createImageFromHandleGL2
+  , imageHandleGL2
 #else
   , createGL3
   , deleteGL3
@@ -148,6 +153,8 @@ import           NanoVG.Internal
 import           NanoVG.Internal.CreateContext
 #if defined(GLES_3)
 import           NanoVG.Internal.GLES3
+#elif defined(GL_2)
+import           NanoVG.Internal.GL2
 #else
 import           NanoVG.Internal.GL3
 #endif

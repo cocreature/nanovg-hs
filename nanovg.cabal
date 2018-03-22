@@ -30,6 +30,11 @@ flag gles3
   default:     False
   manual:      True
 
+flag gl2
+  description: Build for GL2. This deactivates GL3 support.
+  default:     False
+  manual:      True
+
 library
   exposed-modules:     NanoVG
                        NanoVG.Internal
@@ -39,6 +44,7 @@ library
                        NanoVG.Internal.FFIHelpers
                        NanoVG.Internal.FixedVector
                        NanoVG.Internal.GL3
+                       NanoVG.Internal.GL2
                        NanoVG.Internal.GLES3
                        NanoVG.Internal.Image
                        NanoVG.Internal.Paint
@@ -78,6 +84,9 @@ library
   if flag(gles3)
     cpp-options:       -DGLES_3
     cc-options:        -DGLES_3
+  if flag(gl2)
+    cpp-options:       -DGL_2
+    cc-options:        -DGL_2
   build-tools:         c2hs
 
 executable example00
