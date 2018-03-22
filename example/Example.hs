@@ -41,7 +41,7 @@ main =
          do makeContextCurrent win
             glewInit
             glGetError
-            c@(Context c') <- createGLES3 (S.fromList [Antialias,StencilStrokes,Debug])
+            c@(Context c') <- createGL3 (S.fromList [Antialias,StencilStrokes,Debug])
             -- error handling? who needs that anyway
             Just demoData <- runMaybeT $ loadDemoData c
             swapInterval 0
