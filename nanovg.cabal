@@ -26,7 +26,7 @@ flag examples
   manual:      True
 
 flag gles3
-  description: Build for GLES3
+  description: Build for GLES3. This deactivates GL3 support.
   default:     False
   manual:      True
 
