@@ -22,12 +22,12 @@ import           NanoVG.Internal.FFIHelpers
 #include "nanovg_gl.h"
 
 {#fun unsafe nvgCreateGL3 as createGL3
-        {bitMask`S.Set CreateFlags'} -> `Context'#}
+        {bitMask`S.Set CreateFlags'} -> `Context' fromPointer#}
 {#fun unsafe nvgDeleteGL3 as deleteGL3
-        {`Context'} -> `()'#}
+        { toPointer `Context' fromPointer} -> `()'#}
 
 {#fun unsafe nvglCreateImageFromHandleGL3 as createImageFromHandleGL3
-        { `Context'
+        { toPointer `Context' fromPointer
         , fromIntegral`GLuint'
         , `CInt'
         , `CInt'
@@ -35,4 +35,6 @@ import           NanoVG.Internal.FFIHelpers
         } -> `Image'Image#}
 
 {#fun unsafe nvglImageHandleGL3 as imageHandleGL3
-        {`Context',imageHandle`Image'} -> `GLuint'fromIntegral#}
+        { toPointer `Context' fromPointer
+        , imageHandle`Image'
+        } -> `GLuint'fromIntegral#}
