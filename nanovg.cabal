@@ -1,5 +1,5 @@
 name:                nanovg
-version:             0.5.2.0
+version:             0.5.2.1
 synopsis:            Haskell bindings for nanovg
 description:         Raw bindings to the OpenGL vector graphics library NanoVG
 homepage:            https://github.com/cocreature/nanovg-hs
@@ -25,14 +25,27 @@ flag examples
   default:     False
   manual:      True
 
+flag gles3
+  description: Build for GLES3. This deactivates GL3 support.
+  default:     False
+  manual:      True
+
+flag gl2
+  description: Build for GL2. This deactivates GL3 support.
+  default:     False
+  manual:      True
+
 library
   exposed-modules:     NanoVG
                        NanoVG.Internal
                        NanoVG.Internal.Color
+                       NanoVG.Internal.CreateContext
                        NanoVG.Internal.Context
                        NanoVG.Internal.FFIHelpers
                        NanoVG.Internal.FixedVector
                        NanoVG.Internal.GL3
+                       NanoVG.Internal.GL2
+                       NanoVG.Internal.GLES3
                        NanoVG.Internal.Image
                        NanoVG.Internal.Paint
                        NanoVG.Internal.Path
@@ -68,6 +81,12 @@ library
   else
     extra-libraries:     GLU, GL, m, GLEW
     pkgconfig-depends: glew
+  if flag(gles3)
+    cpp-options:       -DGLES_3
+    cc-options:        -DGLES_3
+  if flag(gl2)
+    cpp-options:       -DGL_2
+    cc-options:        -DGL_2
   build-tools:         c2hs
 
 executable example00
