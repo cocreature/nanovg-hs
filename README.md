@@ -1,7 +1,7 @@
 # NanoVG Haskell bindings
 
-[![Build Status](https://img.shields.io/travis/cocreature/nanovg-hs.svg)]()
-[![Hackage](https://img.shields.io/hackage/v/nanovg.svg)]()
+[![Build Status](https://img.shields.io/travis/cocreature/nanovg-hs.svg)](https://travis-ci.org/cocreature/nanovg-hs)
+[![Hackage](https://img.shields.io/hackage/v/nanovg.svg)](https://hackage.haskell.org/package/nanovg)
 
 Currently only the GL3 backend is supported.
 

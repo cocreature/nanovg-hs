@@ -28,15 +28,15 @@ before_cache:
 
 matrix:
   include:
-    - compiler: "ghc-7.10.3"
-    # env: TEST=--disable-tests BENCH=--disable-benchmarks
-      addons: {apt: {packages: [ghc-ppa-tools,cabal-install-head,ghc-7.10.3,libglew-dev,gcc-5], sources: [hvr-ghc,ubuntu-toolchain-r-test]}}
     - compiler: "ghc-8.0.2"
     # env: TEST=--disable-tests BENCH=--disable-benchmarks
       addons: {apt: {packages: [ghc-ppa-tools,cabal-install-head,ghc-8.0.2,libglew-dev,gcc-5], sources: [hvr-ghc,ubuntu-toolchain-r-test]}}
     - compiler: "ghc-8.2.2"
     # env: TEST=--disable-tests BENCH=--disable-benchmarks
       addons: {apt: {packages: [ghc-ppa-tools,cabal-install-head,ghc-8.2.2,libglew-dev,gcc-5], sources: [hvr-ghc,ubuntu-toolchain-r-test]}}
+    - compiler: "ghc-8.4.2"
+    # env: TEST=--disable-tests BENCH=--disable-benchmarks
+      addons: {apt: {packages: [ghc-ppa-tools,cabal-install-head,ghc-8.4.2,libglew-dev,gcc-5], sources: [hvr-ghc,ubuntu-toolchain-r-test]}}
 
 before_install:
   - HC=${CC}
@@ -69,7 +69,7 @@ install:
   - cabal new-configure --with-gcc gcc-5 --ghc-options "-pgmc=gcc-5"
   - cabal new-build -w ${HC} ${TEST} ${BENCH} --project-file="cabal.project" --dep -j2 all
   - cabal new-build -w ${HC} --disable-tests --disable-benchmarks --project-file="cabal.project" --dep -j2 all
-  - rm -rf "."/.ghc.environment.* "."/dist
+  - rm -rf .ghc.environment.* "."/dist
   - DISTDIR=$(mktemp -d /tmp/dist-test.XXXX)
 
 # Here starts the actual work to be performed for the package under test;
