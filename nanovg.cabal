@@ -36,7 +36,48 @@ flag gl2
   manual:      True
 
 library
-  exposed-modules:     NanoVG
+  if flag(gles3)
+    exposed-modules:
+                     NanoVG
+                     NanoVG.Internal
+                     NanoVG.Internal.Color
+                     NanoVG.Internal.CreateContext
+                     NanoVG.Internal.Context
+                     NanoVG.Internal.FFIHelpers
+                     NanoVG.Internal.FixedVector
+                     NanoVG.Internal.GLES3
+                     NanoVG.Internal.Image
+                     NanoVG.Internal.Paint
+                     NanoVG.Internal.Path
+                     NanoVG.Internal.Scissor
+                     NanoVG.Internal.State
+                     NanoVG.Internal.Style
+                     NanoVG.Internal.Text
+                     NanoVG.Internal.Transformation
+                     NanoVG.Internal.Types
+  else
+    if flag(gl2)
+      exposed-modules:
+                       NanoVG
+                       NanoVG.Internal
+                       NanoVG.Internal.Color
+                       NanoVG.Internal.CreateContext
+                       NanoVG.Internal.Context
+                       NanoVG.Internal.FFIHelpers
+                       NanoVG.Internal.FixedVector
+                       NanoVG.Internal.GL2
+                       NanoVG.Internal.Image
+                       NanoVG.Internal.Paint
+                       NanoVG.Internal.Path
+                       NanoVG.Internal.Scissor
+                       NanoVG.Internal.State
+                       NanoVG.Internal.Style
+                       NanoVG.Internal.Text
+                       NanoVG.Internal.Transformation
+                       NanoVG.Internal.Types
+    else
+      exposed-modules:
+                       NanoVG
                        NanoVG.Internal
                        NanoVG.Internal.Color
                        NanoVG.Internal.CreateContext
@@ -44,8 +85,6 @@ library
                        NanoVG.Internal.FFIHelpers
                        NanoVG.Internal.FixedVector
                        NanoVG.Internal.GL3
-                       NanoVG.Internal.GL2
-                       NanoVG.Internal.GLES3
                        NanoVG.Internal.Image
                        NanoVG.Internal.Paint
                        NanoVG.Internal.Path
