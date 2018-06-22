@@ -57,7 +57,7 @@ library
                        NanoVG.Internal.Types
   build-depends:       base >= 4.8 && <5.0
                      , bytestring >= 0.10 && < 0.11
-                     , containers >= 0.5 && < 0.6
+                     , containers >= 0.5 && < 0.7
                      , text >= 1.2 && < 1.3
                      , vector >= 0.11 && < 0.13
   hs-source-dirs:      src
