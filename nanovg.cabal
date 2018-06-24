@@ -36,25 +36,33 @@ flag gl2
   manual:      True
 
 library
-  exposed-modules:     NanoVG
-                       NanoVG.Internal
-                       NanoVG.Internal.Color
-                       NanoVG.Internal.CreateContext
-                       NanoVG.Internal.Context
-                       NanoVG.Internal.FFIHelpers
-                       NanoVG.Internal.FixedVector
-                       NanoVG.Internal.GL3
+  exposed-modules:
+                   NanoVG
+                   NanoVG.Internal
+                   NanoVG.Internal.Color
+                   NanoVG.Internal.CreateContext
+                   NanoVG.Internal.Context
+                   NanoVG.Internal.FFIHelpers
+                   NanoVG.Internal.FixedVector
+                   NanoVG.Internal.Image
+                   NanoVG.Internal.Paint
+                   NanoVG.Internal.Path
+                   NanoVG.Internal.Scissor
+                   NanoVG.Internal.State
+                   NanoVG.Internal.Style
+                   NanoVG.Internal.Text
+                   NanoVG.Internal.Transformation
+                   NanoVG.Internal.Types
+  if flag(gles3)
+    exposed-modules:
+                     NanoVG.Internal.GLES3
+  else
+    if flag(gl2)
+      exposed-modules:
                        NanoVG.Internal.GL2
-                       NanoVG.Internal.GLES3
-                       NanoVG.Internal.Image
-                       NanoVG.Internal.Paint
-                       NanoVG.Internal.Path
-                       NanoVG.Internal.Scissor
-                       NanoVG.Internal.State
-                       NanoVG.Internal.Style
-                       NanoVG.Internal.Text
-                       NanoVG.Internal.Transformation
-                       NanoVG.Internal.Types
+    else
+      exposed-modules:
+                       NanoVG.Internal.GL3
   build-depends:       base >= 4.8 && <5.0
                      , bytestring >= 0.10 && < 0.11
                      , containers >= 0.5 && < 0.7
