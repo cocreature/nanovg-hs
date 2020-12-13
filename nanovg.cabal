@@ -81,13 +81,13 @@ library
   c-sources:           nanovg/src/nanovg.c
                        cbits/nanovg_wrapper.c
                        cbits/nanovg_gl.c
-  cc-options:          -DNDEBUG
+  cc-options:          -DNDEBUG -DFONS_USE_FREETYPE
   ghc-options:         -Wall
   if os(osx)
     frameworks:          OpenGL
     cc-options:          -Ddarwin_HOST_OS
   else
-    extra-libraries:     GLU, GL, m, GLEW, X11
+    extra-libraries:     GLU, GL, m, GLEW, X11, freetype
     pkgconfig-depends: glew
   if flag(gles3)
     cpp-options:       -DGLES_3
