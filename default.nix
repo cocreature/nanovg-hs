@@ -1,5 +1,5 @@
 { pkgs ? import <nixpkgs> {} }:
-pkgs.haskellPackages.callCabal2nix "nanovg" ./. {
+pkgs.haskellPackages.callCabal2nixWithOptions "nanovg" ./. "-fexamples" {
   GLEW = null;
   inherit (pkgs) glew;
   inherit (pkgs) libGL;
