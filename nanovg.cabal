@@ -1,5 +1,5 @@
 name:                nanovg
-version:             0.6.0.0
+version:             0.7.0.0
 synopsis:            Haskell bindings for nanovg
 description:         Raw bindings to the OpenGL vector graphics library NanoVG
 homepage:            https://github.com/cocreature/nanovg-hs
