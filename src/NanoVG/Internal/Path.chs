@@ -50,13 +50,19 @@ import NanoVG.Internal.Context
 {#fun unsafe nvgArc as arc
         {`Context',`CFloat',`CFloat', `CFloat', `CFloat', `CFloat', `Winding'} -> `()'#}
 
--- | Creates new rectangle shaped sub-path.
+-- | Creates new rectangle shaped sub-path. Receives x, y, w and h
 {#fun unsafe nvgRect as rect
          {`Context',`CFloat',`CFloat',`CFloat',`CFloat'} -> `()'#}
 
--- | Creates new rounded rectangle shaped sub-path.
+-- | Creates new rounded rectangle shaped sub-path. In addition to x, y, w and h, it receives
+-- | r, indicating the radius (equal in all corners)
 {#fun unsafe nvgRoundedRect as roundedRect
         {`Context',`CFloat',`CFloat',`CFloat',`CFloat',`CFloat'} -> `()'#}
+
+-- | Creates new rounded rectangle shaped sub-path. In addition to x, y, w and h, it receives
+-- | rtl, rtr, rbr, rbl, the radius of each corner in clockwise order starting from top left
+{#fun unsafe nvgRoundedRectVarying as roundedRectVarying
+        {`Context',`CFloat',`CFloat',`CFloat',`CFloat',`CFloat',`CFloat',`CFloat',`CFloat'} -> `()'#}
 
 -- | Creates new ellipse shaped sub-path.
 {#fun unsafe nvgEllipse as ellipse

@@ -44,6 +44,7 @@ library
                    NanoVG.Internal.Context
                    NanoVG.Internal.FFIHelpers
                    NanoVG.Internal.FixedVector
+                   NanoVG.Internal.GlobalComposite
                    NanoVG.Internal.Image
                    NanoVG.Internal.Paint
                    NanoVG.Internal.Path

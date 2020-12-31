@@ -76,6 +76,8 @@ renderDemo c demoData mx my w h t =
 
      drawScissor c 50 (fromIntegral h-80) (realToFrac t)
 
+     drawComposite c
+
      save c
      let popy = 95 + 24
      drawThumbnails c 365 popy 160 300 (images demoData) (realToFrac t)
@@ -600,6 +602,35 @@ drawScissor c x y t =
      fill c
 
      restore c
+
+drawComposite :: Context -> IO ()
+drawComposite c = do
+  -- The example in https://github.com/memononen/nanovg/pull/298 implies the
+  -- need to call beginFrame/endFrame, but it does not seem to be necessary
+  save c
+
+  -- Clears a fragment of the background
+  globalCompositeOperation c DestinationOut
+  beginPath c
+  rect c 50 50 100 100
+  fillColor c (rgb 0 0 0)
+  fill c
+
+  -- Draws a red circle
+  globalCompositeOperation c SourceOver
+  beginPath c
+  circle c 100 100 30
+  fillColor c (rgb 255 0 0)
+  fill c
+
+  -- Draws a blue, rounded, rectangle behind the red circle
+  globalCompositeOperation c DestinationOver
+  beginPath c
+  roundedRectVarying c 60 60 80 60 20 10 20 10
+  fillColor c (rgb 0 0 255)
+  fill c
+
+  restore c
 
 clamp :: Ord a => a -> a -> a -> a
 clamp a' low up
