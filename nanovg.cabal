@@ -87,7 +87,7 @@ library
     frameworks:          OpenGL
     cc-options:          -Ddarwin_HOST_OS
   else
-    extra-libraries:     GLU, GL, m, GLEW
+    extra-libraries:     GLU, GL, m, GLEW, X11
     pkgconfig-depends: glew
   if flag(gles3)
     cpp-options:       -DGLES_3
