@@ -86,15 +86,28 @@ module NanoVG
   , arc
   , rect
   , roundedRect
+  , roundedRectVarying
   , ellipse
   , circle
   , fill
   , stroke
+  -- * Global Composite
+  , BlendFactor(..)
+  , CompositeOperation(..)
+  , globalCompositeOperation
+  , globalCompositeBlendFunc
+  , globalCompositeBlendFuncSeparate
   -- * Text
   , Font(..)
   , createFont
+  , createFontAtIndex
   , createFontMem
+  , createFontMemAtIndex
   , findFont
+  , addFallbackFontId
+  , addFallbackFont
+  , resetFallbackFontsId
+  , resetFallbackFonts
   , fontSize
   , fontBlur
   , textLetterSpacing

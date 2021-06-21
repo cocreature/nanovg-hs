@@ -85,10 +85,17 @@ module NanoVG.Internal
   , arc
   , rect
   , roundedRect
+  , roundedRectVarying
   , ellipse
   , circle
   , fill
   , stroke
+  -- * Global Composite
+  , BlendFactor(..)
+  , CompositeOperation(..)
+  , globalCompositeOperation
+  , globalCompositeBlendFunc
+  , globalCompositeBlendFuncSeparate
   -- * Vector types
   , V2(..)
   , V3(..)
@@ -101,6 +108,7 @@ import Foreign.C.Types
 import NanoVG.Internal.Color
 import NanoVG.Internal.Context
 import NanoVG.Internal.FixedVector
+import NanoVG.Internal.GlobalComposite
 import NanoVG.Internal.Image
 import NanoVG.Internal.Paint
 import NanoVG.Internal.Path
@@ -130,7 +138,7 @@ import NanoVG.Internal.Types
 -- frame buffer size. In that case you would set windowWidth/Height to the window size
 -- devicePixelRatio to: frameBufferWidth / windowWidth.
 {#fun unsafe nvgBeginFrame as beginFrame
-        {`Context',`CInt',`CInt',`Float'} -> `()'#}
+        {`Context',`Float',`Float',`Float'} -> `()'#}
 
 -- | Cancels drawing the current frame.
 {#fun unsafe nvgCancelFrame as cancelFrame

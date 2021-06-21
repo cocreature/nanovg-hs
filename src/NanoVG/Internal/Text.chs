@@ -99,14 +99,42 @@ safeFont i
 {#fun unsafe nvgCreateFont as createFont
         {`Context',withCString*`T.Text','withCString.unwrapFileName'*`FileName'} -> `Maybe Font'safeFont#}
 
+-- | Creates font by loading it from the disk from specified file name.
+-- fontIndex specifies which font face to load from a .ttf/.ttc file.
+-- Returns handle to the font.
+{#fun unsafe nvgCreateFontAtIndex as createFontAtIndex
+        {`Context',withCString*`T.Text','withCString.unwrapFileName'*`FileName', `CInt'} -> `Maybe Font'safeFont#}
+
 -- | Creates image by loading it from the specified memory chunk.
 -- Returns handle to the font.
 {#fun unsafe nvgCreateFontMem as createFontMem
         {`Context',withCString*`T.Text',useAsCStringLen'*`ByteString'&,zero-`CInt'} -> `Maybe Font'safeFont#}
 
+-- | Creates image by loading it from the specified memory chunk.
+-- fontIndex specifies which font face to load from a .ttf/.ttc file.
+-- Returns handle to the font.
+{#fun unsafe nvgCreateFontMemAtIndex as createFontMemAtIndex
+        {`Context',withCString*`T.Text',useAsCStringLen'*`ByteString'&,zero-`CInt',`CInt'} -> `Maybe Font'safeFont#}
+
 -- | Finds a loaded font of specified name, and returns handle to it, or -1 if the font is not found.
 {#fun unsafe nvgFindFont as findFont
         {`Context', withCString*`T.Text'} -> `Maybe Font'safeFont#}
+
+-- | Adds a fallback font by handle.
+{#fun unsafe nvgAddFallbackFontId as addFallbackFontId
+        {`Context',`CInt',`CInt'} -> `Maybe Font'safeFont#}
+
+-- | Adds a fallback font by name.
+{#fun unsafe nvgAddFallbackFont as addFallbackFont
+        {`Context',withCString*`T.Text',withCString*`T.Text'} -> `Maybe Font'safeFont#}
+
+-- | Resets fallback fonts by handle.
+{#fun unsafe nvgResetFallbackFontsId as resetFallbackFontsId
+        {`Context',`CInt'} -> `()'#}
+
+-- | Resets fallback fonts by name.
+{#fun unsafe nvgResetFallbackFonts as resetFallbackFonts
+        {`Context',withCString*`T.Text'} -> `()'#}
 
 -- | Sets the font size of current text style.
 {#fun unsafe nvgFontSize as fontSize
