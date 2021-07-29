@@ -35,6 +35,11 @@ flag gl2
   default:     False
   manual:      True
 
+flag stb_truetype
+  description: Use stb_truetype. By default uses freetype.
+  default:     False
+  manual:      True
+
 library
   exposed-modules:
                    NanoVG
@@ -82,22 +87,32 @@ library
   c-sources:           nanovg/src/nanovg.c
                        cbits/nanovg_wrapper.c
                        cbits/nanovg_gl.c
-  cc-options:          -DNDEBUG -DFONS_USE_FREETYPE
-  ghc-options:         -Wall
-  if os(osx)
-    frameworks:          OpenGL
-    cc-options:          -Ddarwin_HOST_OS
+  if flag(stb_truetype)
+    cc-options:          -DNDEBUG
   else
-    if os(windows)
-      extra-libraries:   freeglut, glew32
+    cc-options:          -DNDEBUG -DFONS_USE_FREETYPE
+  ghc-options:         -Wall
+  if os(windows)
+    extra-libraries:   freeglut, glew32
+    if flag(stb_truetype)
       pkgconfig-depends: glew
     else
-      if os(osx)
-        extra-libraries:   GLU, GL, m, GLEW
+      pkgconfig-depends: glew, freetype2
+  else
+    if os(osx)
+      frameworks:        OpenGL
+      cc-options:        -Ddarwin_HOST_OS
+      extra-libraries:   GLEW
+      if flag(stb_truetype)
         pkgconfig-depends: glew
       else
-        extra-libraries:     GLU, GL, m, GLEW, X11
+        pkgconfig-depends: glew, freetype2
+    else
+      extra-libraries:   GLU, GL, m, GLEW, X11
+      if flag(stb_truetype)
         pkgconfig-depends: glew
+      else
+        pkgconfig-depends: glew, freetype2
   if flag(gles3)
     cpp-options:       -DGLES_3
     cc-options:        -DGLES_3
