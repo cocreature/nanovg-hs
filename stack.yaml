@@ -1,9 +1,9 @@
-resolver: lts-10.3
+resolver: lts-17.15
 packages:
 - '.'
 extra-deps:
 - GLFW-b-1.4.8.1
-- bindings-GLFW-3.1.2.3
+- bindings-GLFW-3.1.2.4
 flags:
   nanovg:
     examples: True
