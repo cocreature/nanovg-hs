@@ -545,7 +545,7 @@ loadDemoData c = do icons <- MaybeT $ createFont c "icons" (FileName "nanovg/exa
           \i ->
             do let file = FileName $
                      "nanovg/example/images/image" <> T.pack (show (i + 1)) <> ".jpg"
-               MaybeT $ createImage c file 0
+               MaybeT $ createImage c file S.empty
 
 drawCaps :: Context -> CFloat -> CFloat -> CFloat -> IO ()
 drawCaps c x y width =

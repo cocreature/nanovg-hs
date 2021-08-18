@@ -4,6 +4,7 @@
 /.cabal-sandbox
 /.stack-work
 /dist-newstyle/
+/dist-*/
 cabal.project.local
 .ghc.environment.*
 result*

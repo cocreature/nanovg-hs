@@ -1,5 +1,5 @@
 name:                nanovg
-version:             0.7.0.0
+version:             0.8.0.0
 synopsis:            Haskell bindings for nanovg
 description:         Raw bindings to the OpenGL vector graphics library NanoVG
 homepage:            https://github.com/cocreature/nanovg-hs
@@ -32,6 +32,11 @@ flag gles3
 
 flag gl2
   description: Build for GL2. This deactivates GL3 support.
+  default:     False
+  manual:      True
+
+flag stb_truetype
+  description: Use stb_truetype. By default uses freetype.
   default:     False
   manual:      True
 
@@ -82,14 +87,32 @@ library
   c-sources:           nanovg/src/nanovg.c
                        cbits/nanovg_wrapper.c
                        cbits/nanovg_gl.c
-  cc-options:          -DNDEBUG -DFONS_USE_FREETYPE
-  ghc-options:         -Wall
-  if os(osx)
-    frameworks:          OpenGL
-    cc-options:          -Ddarwin_HOST_OS
+  if flag(stb_truetype)
+    cc-options:          -DNDEBUG
   else
-    extra-libraries:     GLU, GL, m, GLEW, X11, freetype
-    pkgconfig-depends: glew
+    cc-options:          -DNDEBUG -DFONS_USE_FREETYPE
+  ghc-options:         -Wall
+  if os(windows)
+    extra-libraries:   freeglut, glew32
+    if flag(stb_truetype)
+      pkgconfig-depends: glew
+    else
+      pkgconfig-depends: glew, freetype2
+  else
+    if os(osx)
+      frameworks:        OpenGL
+      cc-options:        -Ddarwin_HOST_OS
+      extra-libraries:   GLEW
+      if flag(stb_truetype)
+        pkgconfig-depends: glew
+      else
+        pkgconfig-depends: glew, freetype2
+    else
+      extra-libraries:   GLU, GL, m, GLEW, X11
+      if flag(stb_truetype)
+        pkgconfig-depends: glew
+      else
+        pkgconfig-depends: glew, freetype2
   if flag(gles3)
     cpp-options:       -DGLES_3
     cc-options:        -DGLES_3
