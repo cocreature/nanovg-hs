@@ -108,7 +108,7 @@ safeFont i
 -- | Creates image by loading it from the specified memory chunk.
 -- Returns handle to the font.
 {#fun unsafe nvgCreateFontMem as createFontMem
-        {`Context',withCString*`T.Text',useAsCStringLen'*`ByteString'&,zero-`CInt'} -> `Maybe Font'safeFont#}
+        {`Context',withCString*`T.Text',useAsCStringLen'*`ByteString'&,one-`CInt'} -> `Maybe Font'safeFont#}
 
 -- | Creates image by loading it from the specified memory chunk.
 -- fontIndex specifies which font face to load from a .ttf/.ttc file.
