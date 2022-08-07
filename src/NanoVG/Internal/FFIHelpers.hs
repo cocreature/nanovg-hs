@@ -2,7 +2,6 @@ module NanoVG.Internal.FFIHelpers
   (withCString
   ,useAsCStringLen'
   ,useAsPtr
-  ,zero
   ,one
   ,null
   ,bitMask
@@ -41,10 +40,6 @@ useAsCStringLen' bs f = useAsCStringLen bs ((\(ptr,len) -> return (castPtr ptr,f
 -- | Wrapper around 'useAsCStringLen'' that discards the length
 useAsPtr :: ByteString -> (Ptr CUChar -> IO a) -> IO a
 useAsPtr bs f = useAsCStringLen' bs (f . fst)
-
--- | Marshalling helper for a constant zero
-zero :: Num a => (a -> b) -> b
-zero f = f 0
 
 -- | Marshalling helper for a constant one
 one :: Num a => (a -> b) -> b
