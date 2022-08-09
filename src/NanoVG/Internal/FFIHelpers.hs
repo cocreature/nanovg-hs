@@ -27,7 +27,7 @@ withCString t = useAsCString (T.encodeUtf8 t)
 useAsCStringLen' :: ByteString -> ((Ptr CUChar,CInt) -> IO a) -> IO a
 useAsCStringLen' bs f = useAsCStringLen bs ((\(ptr,len) -> return (castPtr ptr,fromIntegral len)) >=> copyCStringLen >=> f)
   where
-    -- | Copy memory under given pointer no a new address.
+    -- | Copy memory under given pointer to a new address.
     -- The allocated memory is not garbage-collected and needs to be freed manually later.
     copyCStringLen :: Integral b => (Ptr a, b) -> IO (Ptr a, b)
     copyCStringLen (from, len) =
