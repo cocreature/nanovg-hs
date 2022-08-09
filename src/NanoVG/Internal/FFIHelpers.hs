@@ -29,6 +29,8 @@ useAsCStringLen' bs f = useAsCStringLen bs ((\(ptr,len) -> return (castPtr ptr,f
   where
     -- | Copy memory under given pointer to a new address.
     -- The allocated memory is not garbage-collected and needs to be freed manually later.
+    -- In the case of 'createFontMem' and 'createFontMemAtIndex' (the only places using it)
+    -- it is freed by NanoVG as a part of 'nvgDeleteGL3'.
     copyCStringLen :: Integral b => (Ptr a, b) -> IO (Ptr a, b)
     copyCStringLen (from, len) =
       let intLen = fromIntegral len
