@@ -105,16 +105,16 @@ safeFont i
 {#fun unsafe nvgCreateFontAtIndex as createFontAtIndex
         {`Context',withCString*`T.Text','withCString.unwrapFileName'*`FileName', `CInt'} -> `Maybe Font'safeFont#}
 
--- | Creates image by loading it from the specified memory chunk.
+-- | Creates font by loading it from the specified memory chunk.
 -- Returns handle to the font.
 {#fun unsafe nvgCreateFontMem as createFontMem
-        {`Context',withCString*`T.Text',useAsCStringLen'*`ByteString'&,zero-`CInt'} -> `Maybe Font'safeFont#}
+        {`Context',withCString*`T.Text',useAsCStringLen'*`ByteString'&,one-`CInt'} -> `Maybe Font'safeFont#}
 
--- | Creates image by loading it from the specified memory chunk.
+-- | Creates font by loading it from the specified memory chunk.
 -- fontIndex specifies which font face to load from a .ttf/.ttc file.
 -- Returns handle to the font.
 {#fun unsafe nvgCreateFontMemAtIndex as createFontMemAtIndex
-        {`Context',withCString*`T.Text',useAsCStringLen'*`ByteString'&,zero-`CInt',`CInt'} -> `Maybe Font'safeFont#}
+        {`Context',withCString*`T.Text',useAsCStringLen'*`ByteString'&,one-`CInt',`CInt'} -> `Maybe Font'safeFont#}
 
 -- | Finds a loaded font of specified name, and returns handle to it, or -1 if the font is not found.
 {#fun unsafe nvgFindFont as findFont
