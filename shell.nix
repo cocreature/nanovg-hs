@@ -1,2 +1,5 @@
 { pkgs ? import <nixpkgs> {} }:
-(import ./default.nix { inherit pkgs; }).env
+(pkgs.haskell.lib.addBuildTool
+  (import ./default.nix { inherit pkgs; })
+  pkgs.cabal-install
+).env

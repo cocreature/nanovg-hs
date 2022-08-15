@@ -1,3 +1,13 @@
+0.8.1.0
+-------
+
+* Fix use after free in `createFontMem` #17
+
+0.8.0.0
+-------
+
+* Windows support
+
 0.6.0.0
 ---
 
