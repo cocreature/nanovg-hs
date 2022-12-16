@@ -30,7 +30,7 @@ safeImage i
 
 -- | Creates image by loading it from the specified chunk of memory.
 {#fun unsafe nvgCreateImageMem as createImageMem
-        {`Context',bitMask`S.Set ImageFlags',useAsCStringLen'*`ByteString'&} -> `Maybe Image'safeImage#}
+        {`Context',bitMask`S.Set ImageFlags',useAsGCedCStringLen*`ByteString'&} -> `Maybe Image'safeImage#}
 
 -- | Creates image from specified image data.
 {#fun unsafe nvgCreateImageRGBA as createImageRGBA

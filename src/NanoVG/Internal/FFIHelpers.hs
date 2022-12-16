@@ -1,6 +1,7 @@
 module NanoVG.Internal.FFIHelpers
   (withCString
   ,useAsCStringLen'
+  ,useAsGCedCStringLen
   ,useAsPtr
   ,one
   ,null
@@ -8,6 +9,7 @@ module NanoVG.Internal.FFIHelpers
   ) where
 
 import           Control.Monad ((>=>))
+import           Data.Bifunctor (bimap)
 import           Data.Bits ((.|.))
 import           Data.ByteString hiding (null)
 import qualified Data.Set as S
@@ -24,6 +26,11 @@ withCString :: T.Text -> (CString -> IO b) -> IO b
 withCString t = useAsCString (T.encodeUtf8 t)
 
 -- | Wrapper around 'useAsCStringLen' that uses 'CUChar's
+--
+-- Copies the given ByteString into a new address.
+-- The allocated memory is not garbage-collected and needs to be freed manually later.
+-- In the case of 'createFontMem' and 'createFontMemAtIndex' (the only places using it)
+-- it is freed by NanoVG as a part of 'nvgDeleteGL3'.
 useAsCStringLen' :: ByteString -> ((Ptr CUChar,CInt) -> IO a) -> IO a
 useAsCStringLen' bs f = useAsCStringLen bs ((\(ptr,len) -> return (castPtr ptr,fromIntegral len)) >=> copyCStringLen >=> f)
   where
@@ -39,9 +46,14 @@ useAsCStringLen' bs f = useAsCStringLen bs ((\(ptr,len) -> return (castPtr ptr,f
         copyBytes to from intLen
         return (to, len)
 
+-- | Wrapper around 'useAsCStringLen' that uses 'CUChar's
+useAsGCedCStringLen :: ByteString -> ((Ptr CUChar, CInt) -> IO a) -> IO a
+useAsGCedCStringLen bs f =
+  useAsCStringLen bs (f . bimap castPtr fromIntegral)
+
 -- | Wrapper around 'useAsCStringLen'' that discards the length
 useAsPtr :: ByteString -> (Ptr CUChar -> IO a) -> IO a
-useAsPtr bs f = useAsCStringLen' bs (f . fst)
+useAsPtr bs f = useAsGCedCStringLen bs (f . fst)
 
 -- | Marshalling helper for a constant one
 one :: Num a => (a -> b) -> b
