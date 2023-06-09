@@ -222,5 +222,6 @@ textGlyphPositions c x y startPtr endPtr maxGlyphs =
             peekElemOff arrayPtr
                         (fromIntegral i)
 
+-- | Draws text string at specified location.
 text :: Context -> CFloat -> CFloat -> T.Text -> IO ()
 text c x y t = withCStringLen t $ \(ptr,len) -> Internal.text c x y ptr (ptr `plusPtr` len)

@@ -160,7 +160,7 @@ safeFont i
 {#fun unsafe nvgFontFaceId as fontFaceId
         {`Context',fontHandle`Font'} -> `()'#}
 
--- | Sets the font face based on specified name of current text styl
+-- | Sets the font face based on specified name of current text style.
 {#fun unsafe nvgFontFace as fontFace
         {`Context',withCString*`T.Text'} -> `()'#}
 
@@ -169,8 +169,8 @@ safeFont i
          {`Context',`CFloat',`CFloat',id`Ptr CChar',id`Ptr CChar'} -> `()'#}
 
 -- | Draws multi-line text string at specified location wrapped at the specified width. If end is specified only the sub-string up to the end is drawn.
--- | White space is stripped at the beginning of the rows, the text is split at word boundaries or when new-line characters are encountered.
--- | Words longer than the max width are slit at nearest character (i.e. no hyphenation).
+-- White space is stripped at the beginning of the rows, the text is split at word boundaries or when new-line characters are encountered.
+-- Words longer than the max width are slit at nearest character (i.e. no hyphenation).
 {#fun unsafe nvgTextBox as textBox
         {`Context',`CFloat',`CFloat',`CFloat',withCString*`T.Text',null-`Ptr CUChar'} -> `()'#}
 
